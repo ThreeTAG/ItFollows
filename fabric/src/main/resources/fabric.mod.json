@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "id": "it_follows",
+  "version": "${version}",
+  "name": "It Follows",
+  "description": "This is an example description! Tell everyone what your mod is about!",
+  "authors": [
+    "Lucraft",
+    "ConnorDawn"
+  ],
+  "contact": {
+    "homepage": "https://modrinth.com/project/itfollows",
+    "sources": "https://github.com/ThreeTAG/ItFollows"
+  },
+  "license": "CC0-1.0",
+  "icon": "assets/it_follows/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "net.threetag.itfollows.fabric.ItFollowsFabric"
+    ],
+    "client": [
+      "net.threetag.itfollows.fabric.client.ItFollowsFabricClient"
+    ]
+  },
+  "mixins": [
+    "it_follows.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.14",
+    "minecraft": "~1.21.5",
+    "java": ">=21",
+    "architectury": ">=16.1.4",
+    "": "*"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}
