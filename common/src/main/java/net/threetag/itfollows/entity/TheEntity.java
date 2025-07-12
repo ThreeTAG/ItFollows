@@ -1,0 +1,139 @@
+package net.threetag.itfollows.entity;
+
+import com.google.common.collect.ImmutableList;
+import dev.architectury.extensions.network.EntitySpawnExtension;
+import net.minecraft.core.UUIDUtil;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.threetag.itfollows.entity.ai.goal.FollowTargetGoal;
+import net.threetag.itfollows.entity.disguise.DisguiseType;
+import net.threetag.itfollows.entity.disguise.DisguiseTypes;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Comparator;
+import java.util.UUID;
+
+public class TheEntity extends Mob implements EntitySpawnExtension {
+
+    private static final EntityDataAccessor<DisguiseType> DISGUISE = SynchedEntityData.defineId(TheEntity.class, DisguiseType.ENTITY_DATA);
+
+    private UUID targetId;
+    private Player targetPlayer;
+    private int ticksSinceDisguiseUpdate;
+
+    public TheEntity(EntityType<? extends Mob> entityType, Level level) {
+        super(entityType, level);
+    }
+
+    public TheEntity(Player target, int distance) {
+        this(IFEntityTypes.THE_ENTITY.get(), target.level());
+        this.targetId = target.getUUID();
+        this.targetPlayer = target;
+        this.setPos(
+                target.getX() + this.random.nextIntBetweenInclusive(-distance, distance),
+                target.getY(),
+                target.getZ() + this.random.nextIntBetweenInclusive(-distance, distance)
+        );
+
+        if (target.level() instanceof ServerLevel serverLevel) {
+//            serverLevel.getChunkSource().removeTicketWithRadius();
+        }
+    }
+
+    @Override
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DISGUISE, DisguiseTypes.ZOMBIE.get());
+    }
+
+    @Override
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(1, new FollowTargetGoal(this));
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+
+        if (!this.level().isClientSide) {
+            this.ticksSinceDisguiseUpdate++;
+
+            if (this.ticksSinceDisguiseUpdate > 200) {
+                for (DisguiseType disguiseType : ImmutableList.copyOf(DisguiseType.REGISTRY).stream()
+                        .sorted(Comparator.comparingInt(DisguiseType::getPriority).reversed()).toList()) {
+                    if (disguiseType.isValid(this)) {
+                        this.setDisguiseType(disguiseType);
+                        break;
+                    }
+                }
+                this.ticksSinceDisguiseUpdate = 0;
+            }
+        }
+    }
+
+    @Override
+    public @NotNull HumanoidArm getMainArm() {
+        return HumanoidArm.RIGHT;
+    }
+
+    @Nullable
+    public Player getTargetPlayer() {
+        if (this.targetPlayer == null && this.targetId != null) {
+            this.targetPlayer = this.level().getPlayerByUUID(this.targetId);
+        }
+
+        return this.targetPlayer;
+    }
+
+    private void setDisguiseType(DisguiseType disguiseType) {
+        this.entityData.set(DISGUISE, disguiseType);
+    }
+
+    public DisguiseType getDisguiseType() {
+        return this.entityData.get(DISGUISE);
+    }
+
+    @Override
+    public boolean isInvisibleTo(Player player) {
+        return player != this.targetPlayer;
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag compoundTag) {
+        super.readAdditionalSaveData(compoundTag);
+
+        if (compoundTag.contains("target")) {
+            this.targetId = UUIDUtil.CODEC.parse(NbtOps.INSTANCE, compoundTag.get("target")).getOrThrow();
+        }
+    }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag compoundTag) {
+        super.addAdditionalSaveData(compoundTag);
+
+        if (this.targetId != null) {
+            compoundTag.put("target", UUIDUtil.CODEC.encodeStart(NbtOps.INSTANCE, this.targetId).getOrThrow());
+        }
+    }
+
+    @Override
+    public void saveAdditionalSpawnData(FriendlyByteBuf buf) {
+        this.targetId = buf.readNullable(b -> b.readUUID());
+    }
+
+    @Override
+    public void loadAdditionalSpawnData(FriendlyByteBuf buf) {
+        buf.writeNullable(this.targetId, (b, id) -> b.writeUUID(id));
+    }
+}
