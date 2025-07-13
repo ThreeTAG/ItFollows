@@ -9,6 +9,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.Mob;
@@ -53,7 +54,7 @@ public class TheEntity extends Mob implements EntitySpawnExtension {
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
-        builder.define(DISGUISE, DisguiseTypes.ZOMBIE.get());
+        builder.define(DISGUISE, DisguiseTypes.PIG.get());
     }
 
     @Override
@@ -70,15 +71,38 @@ public class TheEntity extends Mob implements EntitySpawnExtension {
             this.ticksSinceDisguiseUpdate++;
 
             if (this.ticksSinceDisguiseUpdate > 200) {
-                for (DisguiseType disguiseType : ImmutableList.copyOf(DisguiseType.REGISTRY).stream()
-                        .sorted(Comparator.comparingInt(DisguiseType::getPriority).reversed()).toList()) {
-                    if (disguiseType.isValid(this)) {
-                        this.setDisguiseType(disguiseType);
-                        break;
+                var target = this.getTargetPlayer();
+
+                if (target instanceof ServerPlayer player) {
+                    var handler = CursePlayerHandler.get(player);
+                    if (!handler.setLastKnownEntity(this) || !handler.isCurseActive()) {
+                        this.discard();
+                        return;
                     }
+
+                    for (DisguiseType disguiseType : ImmutableList.copyOf(DisguiseType.REGISTRY).stream()
+                            .sorted(Comparator.comparingInt(DisguiseType::getPriority).reversed()).toList()) {
+                        if (disguiseType.isValid(this)) {
+                            this.setDisguiseType(disguiseType);
+                            break;
+                        }
+                    }
+                } else {
+                    this.discard();
                 }
+
                 this.ticksSinceDisguiseUpdate = 0;
             }
+        }
+    }
+
+    @Override
+    public void onRemoval(RemovalReason removalReason) {
+        super.onRemoval(removalReason);
+        var target = this.getTargetPlayer();
+
+        if (target instanceof ServerPlayer player) {
+            CursePlayerHandler.get(player).removeEntity(this);
         }
     }
 
@@ -89,7 +113,7 @@ public class TheEntity extends Mob implements EntitySpawnExtension {
 
     @Nullable
     public Player getTargetPlayer() {
-        if (this.targetPlayer == null && this.targetId != null) {
+        if ((this.targetPlayer == null || this.targetPlayer.isRemoved()) && this.targetId != null) {
             this.targetPlayer = this.level().getPlayerByUUID(this.targetId);
         }
 

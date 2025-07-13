@@ -5,8 +5,9 @@ import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.world.entity.player.Player;
-import net.threetag.itfollows.entity.TheEntity;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.threetag.itfollows.entity.CursePlayerHandler;
 
 public class ItFollowsCommand {
 
@@ -15,24 +16,46 @@ public class ItFollowsCommand {
                 Commands.literal("it_follows")
                         .requires(commandSourceStack -> commandSourceStack.hasPermission(2))
                         .then(
-                                Commands.literal("summon")
+                                Commands.literal("start_curse")
                                         .then(Commands.argument("player", EntityArgument.player())
                                                 .executes(commandContext ->
-                                                        summon(commandContext, EntityArgument.getPlayer(commandContext, "player"))))
+                                                        startCurse(commandContext, EntityArgument.getPlayer(commandContext, "player"))))
+
+                        )
+                        .then(
+                                Commands.literal("stop_curse")
+                                        .then(Commands.argument("player", EntityArgument.player())
+                                                .executes(commandContext ->
+                                                        stopCurse(commandContext, EntityArgument.getPlayer(commandContext, "player"))))
 
                         )
         );
     }
 
-    private static int summon(CommandContext<CommandSourceStack> commandContext, Player player) {
-        try {
-            var entity = new TheEntity(player, 20);
-            player.level().addFreshEntity(entity);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    private static int startCurse(CommandContext<CommandSourceStack> commandContext, ServerPlayer player) {
+        var handler = CursePlayerHandler.get(player);
 
-        return 1;
+        if (handler.isCurseActive()) {
+            commandContext.getSource().sendFailure(Component.literal("Curse already started!!!"));
+            return 0;
+        } else {
+            handler.startCurse();
+            commandContext.getSource().sendSuccess(() -> Component.literal("curse started!!"), true);
+            return 1;
+        }
+    }
+
+    private static int stopCurse(CommandContext<CommandSourceStack> commandContext, ServerPlayer player) {
+        var handler = CursePlayerHandler.get(player);
+
+        if (!handler.isCurseActive()) {
+            commandContext.getSource().sendFailure(Component.literal("No Curse active!!!"));
+            return 0;
+        } else {
+            handler.stopCurse();
+            commandContext.getSource().sendSuccess(() -> Component.literal("curse stopped!!"), true);
+            return 1;
+        }
     }
 
 }
