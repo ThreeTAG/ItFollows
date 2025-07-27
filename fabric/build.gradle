@@ -31,6 +31,14 @@ dependencies {
     shadowBundle project(path: ':common', configuration: 'transformProductionFabric')
 }
 
+fabricApi {
+    configureDataGeneration {
+        client = true
+        outputDirectory = project(':common').file("src/generated")
+        modId = 'it_follows'
+    }
+}
+
 processResources {
     inputs.property 'version', project.version
 

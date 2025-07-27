@@ -11,6 +11,11 @@ import net.threetag.itfollows.entity.CursePlayerHandler;
 
 public class ItFollowsCommand {
 
+    public static final String ERROR_CURSE_ALREADY_STARTED = "commands.it_follows.start_curse.error.already_started";
+    public static final String START_CURSE_SUCCESS = "commands.it_follows.start_curse.success";
+    public static final String ERROR_NO_ACTIVE_CURSE = "commands.it_follows.stop_curse.error.no_active_curse";
+    public static final String STOP_CURSE_SUCCESS = "commands.it_follows.stop_curse.success";
+
     public static void register(CommandDispatcher<CommandSourceStack> commandDispatcher) {
         commandDispatcher.register(
                 Commands.literal("it_follows")
@@ -36,11 +41,11 @@ public class ItFollowsCommand {
         var handler = CursePlayerHandler.get(player);
 
         if (handler.isCurseActive()) {
-            commandContext.getSource().sendFailure(Component.literal("Curse already started!!!"));
+            commandContext.getSource().sendFailure(Component.translatableEscape(ERROR_CURSE_ALREADY_STARTED, player.getDisplayName()));
             return 0;
         } else {
             handler.startCurse();
-            commandContext.getSource().sendSuccess(() -> Component.literal("curse started!!"), true);
+            commandContext.getSource().sendSuccess(() -> Component.translatableEscape(START_CURSE_SUCCESS, player.getDisplayName()), true);
             return 1;
         }
     }
@@ -49,11 +54,11 @@ public class ItFollowsCommand {
         var handler = CursePlayerHandler.get(player);
 
         if (!handler.isCurseActive()) {
-            commandContext.getSource().sendFailure(Component.literal("No Curse active!!!"));
+            commandContext.getSource().sendFailure(Component.translatableEscape(ERROR_NO_ACTIVE_CURSE, player.getDisplayName()));
             return 0;
         } else {
             handler.stopCurse();
-            commandContext.getSource().sendSuccess(() -> Component.literal("curse stopped!!"), true);
+            commandContext.getSource().sendSuccess(() -> Component.translatableEscape(STOP_CURSE_SUCCESS, player.getDisplayName()), true);
             return 1;
         }
     }

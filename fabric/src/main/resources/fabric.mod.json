@@ -21,6 +21,9 @@
     ],
     "client": [
       "net.threetag.itfollows.fabric.client.ItFollowsFabricClient"
+    ],
+    "fabric-datagen": [
+      "net.threetag.itfollows.datagen.fabric.ItFollowsDataGen"
     ]
   },
   "mixins": [

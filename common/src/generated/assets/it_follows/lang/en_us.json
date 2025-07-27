@@ -1,0 +1,6 @@
+{
+  "commands.it_follows.start_curse.error.already_started": "%s already has an active curse",
+  "commands.it_follows.start_curse.success": "%s received the curse",
+  "commands.it_follows.stop_curse.error.no_active_curse": "%s has no curse",
+  "commands.it_follows.stop_curse.success": "%s no longer has the curse"
+}

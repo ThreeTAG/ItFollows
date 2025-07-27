@@ -1,0 +1,6 @@
+{
+  "commands.it_follows.start_curse.error.already_started": "%s hat den Fluch schoh",
+  "commands.it_follows.start_curse.success": "%s hat nu den Fluch",
+  "commands.it_follows.stop_curse.error.no_active_curse": "%s hat keenen Fluch",
+  "commands.it_follows.stop_curse.success": "%s hat nu keenen Fluch mehr"
+}
