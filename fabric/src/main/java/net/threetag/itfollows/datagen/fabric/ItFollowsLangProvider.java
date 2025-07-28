@@ -25,6 +25,7 @@ public abstract class ItFollowsLangProvider extends FabricLanguageProvider {
             builder.add(ItFollowsCommand.START_CURSE_SUCCESS, "%s received the curse");
             builder.add(ItFollowsCommand.ERROR_NO_ACTIVE_CURSE, "%s has no curse");
             builder.add(ItFollowsCommand.STOP_CURSE_SUCCESS, "%s no longer has the curse");
+            builder.add(ItFollowsCommand.POSITION, "%s's entity is at %s (%s blocks away)");
         }
     }
 
@@ -40,6 +41,7 @@ public abstract class ItFollowsLangProvider extends FabricLanguageProvider {
             builder.add(ItFollowsCommand.START_CURSE_SUCCESS, "%s hat nun den Fluch");
             builder.add(ItFollowsCommand.ERROR_NO_ACTIVE_CURSE, "%s hat keinen Fluch");
             builder.add(ItFollowsCommand.STOP_CURSE_SUCCESS, "%s hat nun den Fluch nicht mehr");
+            builder.add(ItFollowsCommand.POSITION, "%s's Entität ist bei %s (%s Blöcke entfernt)");
         }
     }
 
@@ -55,6 +57,7 @@ public abstract class ItFollowsLangProvider extends FabricLanguageProvider {
             builder.add(ItFollowsCommand.START_CURSE_SUCCESS, "%s hat nu den Fluch");
             builder.add(ItFollowsCommand.ERROR_NO_ACTIVE_CURSE, "%s hat keenen Fluch");
             builder.add(ItFollowsCommand.STOP_CURSE_SUCCESS, "%s hat nu keenen Fluch mehr");
+            builder.add(ItFollowsCommand.POSITION, "%s's Entität is bei %s (%s Blögge endfernd)");
         }
     }
 }

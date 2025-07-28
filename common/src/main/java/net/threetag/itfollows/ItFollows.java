@@ -4,6 +4,7 @@ import dev.architectury.event.events.common.CommandRegistrationEvent;
 import net.minecraft.resources.ResourceLocation;
 import net.threetag.itfollows.command.ItFollowsCommand;
 import net.threetag.itfollows.entity.IFEntityTypes;
+import net.threetag.itfollows.entity.IFTicketTypes;
 import net.threetag.itfollows.entity.disguise.DisguiseTypes;
 
 public final class ItFollows {
@@ -13,6 +14,7 @@ public final class ItFollows {
     public static void init() {
         IFEntityTypes.ENTITY_TYPES.register();
         DisguiseTypes.DISGUISE_TYPES.register();
+        IFTicketTypes.TICKET_TYPES.register();
 
         IFEntityTypes.init();
 

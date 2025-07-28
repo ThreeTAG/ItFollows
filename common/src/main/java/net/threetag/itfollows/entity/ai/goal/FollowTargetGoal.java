@@ -23,6 +23,7 @@ public class FollowTargetGoal extends Goal {
     @Override
     public void start() {
         this.timeToRecalcPath = 0;
+        this.entity.setTarget(this.entity.getTargetPlayer());
     }
 
     @Override

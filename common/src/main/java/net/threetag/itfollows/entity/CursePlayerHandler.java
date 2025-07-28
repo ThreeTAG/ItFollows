@@ -1,17 +1,24 @@
 package net.threetag.itfollows.entity;
 
-import net.minecraft.core.BlockPos;
+import net.minecraft.core.SectionPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.TicketType;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.phys.Vec3;
 
 public class CursePlayerHandler {
+
+    public static final int DEFAULT_DISTANCE = 2000;
 
     private final ServerPlayer player;
     private boolean curseActive = false;
     private TheEntity lastKnownEntity;
     private int lastKnownEntityId = -1;
-    private BlockPos lastKnownPosition = null;
+    private Vec3 entityPosition = null;
+    private int updateTimer = 0;
 
     public CursePlayerHandler(ServerPlayer player) {
         this.player = player;
@@ -20,32 +27,42 @@ public class CursePlayerHandler {
     public void read(CompoundTag nbt) {
         this.curseActive = nbt.getBooleanOr("curse_active", false);
         this.lastKnownEntityId = nbt.getIntOr("last_known_entity_id", -1);
-        this.lastKnownPosition = nbt.contains("last_known_position") ? BlockPos.CODEC.parse(NbtOps.INSTANCE, nbt.get("last_known_position")).getOrThrow() : null;
+        this.entityPosition = nbt.contains("entity_position") ? Vec3.CODEC.parse(NbtOps.INSTANCE, nbt.get("entity_position")).getOrThrow() : null;
     }
 
     public CompoundTag write() {
         var nbt = new CompoundTag();
         nbt.putBoolean("curse_active", this.curseActive);
         nbt.putInt("last_known_entity_id", this.lastKnownEntityId);
-        if (this.lastKnownPosition != null) {
-            nbt.put("last_known_position", BlockPos.CODEC.encodeStart(NbtOps.INSTANCE, this.lastKnownPosition).getOrThrow());
+        if (this.entityPosition != null) {
+            nbt.put("entity_position", Vec3.CODEC.encodeStart(NbtOps.INSTANCE, this.entityPosition).getOrThrow());
         }
         return nbt;
     }
 
     public void tick() {
         if (this.curseActive) {
-            if (this.lastKnownEntity == null || this.lastKnownEntity.isRemoved()) {
-                this.spawnNewEntity();
+            this.updateTimer++;
+
+            if (this.updateTimer >= 20) {
+                if (this.lastKnownEntity == null) {
+                    this.lastKnownEntityId = -1;
+
+                    if (!this.spawnNewEntity(DEFAULT_DISTANCE)) {
+                        this.simulateEntityMovement();
+                    }
+                }
+
+                this.updateTimer = 0;
             }
         }
     }
 
-    public void startCurse() {
+    public void startCurse(int distance) {
         if (!this.curseActive) {
             this.curseActive = true;
-            this.lastKnownPosition = null;
-            this.spawnNewEntity();
+            this.entityPosition = null;
+            this.spawnNewEntity(distance);
         }
     }
 
@@ -58,21 +75,46 @@ public class CursePlayerHandler {
         }
     }
 
-    private void spawnNewEntity() {
+    private boolean spawnNewEntity(int distance) {
         if (this.curseActive) {
             if (this.lastKnownEntity != null) {
                 this.lastKnownEntity.discard();
             }
 
-            this.lastKnownEntity = new TheEntity(this.player, 50);
-
-            if (this.lastKnownPosition != null) {
-                this.lastKnownEntity.setPos(this.lastKnownPosition.getCenter());
+            if (this.entityPosition == null) {
+                this.entityPosition = TheEntity.getRandomPos(this.player.position(), distance, this.player.getRandom());
             }
 
-            this.player.level().addFreshEntity(this.lastKnownEntity);
-            this.lastKnownEntityId = this.lastKnownEntity.getId();
-            this.lastKnownPosition = this.lastKnownEntity.blockPosition();
+            if (this.isEntityPosLoaded()) {
+                this.lastKnownEntity = new TheEntity(this.player, distance);
+                this.lastKnownEntity.setPos(this.entityPosition);
+                boolean spawned = this.player.serverLevel().addWithUUID(this.lastKnownEntity);
+
+                if (spawned) {
+                    this.lastKnownEntityId = this.lastKnownEntity.getId();
+                    placeTicket(this.player.serverLevel(), new ChunkPos(
+                            SectionPos.blockToSectionCoord(this.entityPosition.x()),
+                            SectionPos.blockToSectionCoord(this.entityPosition.z())
+                    ));
+                }
+
+                return spawned;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean isEntityPosLoaded() {
+        return this.player.serverLevel().canSpawnEntitiesInChunk(new ChunkPos(
+                SectionPos.blockToSectionCoord(this.entityPosition.x()),
+                SectionPos.blockToSectionCoord(this.entityPosition.z())
+        ));
+    }
+
+    public void simulateEntityMovement() {
+        if (this.lastKnownEntity == null) {
+            this.entityPosition = this.entityPosition.add(this.player.position().subtract(this.entityPosition).normalize());
         }
     }
 
@@ -80,7 +122,7 @@ public class CursePlayerHandler {
         if (this.lastKnownEntityId == entity.getId()) {
             this.lastKnownEntity = entity;
             this.lastKnownEntityId = entity.getId();
-            this.lastKnownPosition = entity.blockPosition();
+            this.entityPosition = entity.position();
             return true;
         } else {
             return false;
@@ -96,6 +138,26 @@ public class CursePlayerHandler {
 
     public boolean isCurseActive() {
         return this.curseActive;
+    }
+
+    public Vec3 getEntityPosition() {
+        return this.entityPosition;
+    }
+
+    public long registerAndUpdateTicket(TheEntity theEntity) {
+        if (theEntity.level() instanceof ServerLevel serverLevel) {
+            ChunkPos chunkPos = theEntity.chunkPosition();
+            this.setLastKnownEntity(theEntity);
+            serverLevel.resetEmptyTime();
+            return placeTicket(serverLevel, chunkPos) - 1L;
+        } else {
+            return 0L;
+        }
+    }
+
+    public static long placeTicket(ServerLevel serverLevel, ChunkPos chunkPos) {
+        serverLevel.getChunkSource().addTicketWithRadius(IFTicketTypes.THE_ENTITY.get(), chunkPos, 2);
+        return TicketType.ENDER_PEARL.timeout();
     }
 
     public static CursePlayerHandler get(ServerPlayer player) {

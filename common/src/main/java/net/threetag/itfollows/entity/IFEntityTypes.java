@@ -10,7 +10,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
 import net.threetag.itfollows.ItFollows;
 import net.threetag.itfollows.client.renderer.entity.TheEntityRenderer;
@@ -24,7 +23,7 @@ public class IFEntityTypes {
     public static final RegistrySupplier<EntityType<TheEntity>> THE_ENTITY = register("the_entity",() -> EntityType.Builder.<TheEntity>of(TheEntity::new, MobCategory.MISC).noLootTable().clientTrackingRange(8).sized(0.6F, 1.8F));
 
     public static void init() {
-        EntityAttributeRegistry.register(THE_ENTITY, Mob::createMobAttributes);
+        EntityAttributeRegistry.register(THE_ENTITY, TheEntity::createMobAttributes);
     }
 
     @Environment(EnvType.CLIENT)
