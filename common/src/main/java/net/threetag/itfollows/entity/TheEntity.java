@@ -4,9 +4,6 @@ import com.google.common.collect.ImmutableList;
 import dev.architectury.extensions.network.EntitySpawnExtension;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
-import net.minecraft.core.UUIDUtil;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -21,6 +18,8 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 import net.threetag.itfollows.entity.ai.goal.FollowTargetGoal;
 import net.threetag.itfollows.entity.disguise.DisguiseType;
@@ -44,11 +43,11 @@ public class TheEntity extends PathfinderMob implements EntitySpawnExtension {
         super(entityType, level);
     }
 
-    public TheEntity(Player target, int distance) {
+    public TheEntity(Player target) {
         this(IFEntityTypes.THE_ENTITY.get(), target.level());
         this.targetId = target.getUUID();
         this.targetPlayer = target;
-        this.setPos(getRandomPos(target.position(), distance, this.random));
+        this.setPos(target.position());
     }
 
     public static AttributeSupplier.Builder createMobAttributes() {
@@ -160,20 +159,16 @@ public class TheEntity extends PathfinderMob implements EntitySpawnExtension {
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag compoundTag) {
-        super.readAdditionalSaveData(compoundTag);
-
-        if (compoundTag.contains("target")) {
-            this.targetId = UUIDUtil.CODEC.parse(NbtOps.INSTANCE, compoundTag.get("target")).getOrThrow();
-        }
+    protected void readAdditionalSaveData(ValueInput valueInput) {
+        super.readAdditionalSaveData(valueInput);
+        this.targetId = valueInput.getString("target").map(UUID::fromString).orElse(null);
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag compoundTag) {
-        super.addAdditionalSaveData(compoundTag);
-
+    protected void addAdditionalSaveData(ValueOutput valueOutput) {
+        super.addAdditionalSaveData(valueOutput);
         if (this.targetId != null) {
-            compoundTag.put("target", UUIDUtil.CODEC.encodeStart(NbtOps.INSTANCE, this.targetId).getOrThrow());
+            valueOutput.putString("target", this.targetId.toString());
         }
     }
 

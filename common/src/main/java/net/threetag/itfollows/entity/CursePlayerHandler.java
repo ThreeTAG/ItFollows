@@ -71,6 +71,7 @@ public class CursePlayerHandler {
             if (this.lastKnownEntity != null) {
                 this.lastKnownEntity.discard();
             }
+            this.entityPosition = null;
             this.curseActive = false;
         }
     }
@@ -86,13 +87,13 @@ public class CursePlayerHandler {
             }
 
             if (this.isEntityPosLoaded()) {
-                this.lastKnownEntity = new TheEntity(this.player, distance);
+                this.lastKnownEntity = new TheEntity(this.player);
                 this.lastKnownEntity.setPos(this.entityPosition);
-                boolean spawned = this.player.serverLevel().addWithUUID(this.lastKnownEntity);
+                boolean spawned = this.player.level().addWithUUID(this.lastKnownEntity);
 
                 if (spawned) {
                     this.lastKnownEntityId = this.lastKnownEntity.getId();
-                    placeTicket(this.player.serverLevel(), new ChunkPos(
+                    placeTicket(this.player.level(), new ChunkPos(
                             SectionPos.blockToSectionCoord(this.entityPosition.x()),
                             SectionPos.blockToSectionCoord(this.entityPosition.z())
                     ));
@@ -106,7 +107,7 @@ public class CursePlayerHandler {
     }
 
     public boolean isEntityPosLoaded() {
-        return this.player.serverLevel().canSpawnEntitiesInChunk(new ChunkPos(
+        return this.player.level().canSpawnEntitiesInChunk(new ChunkPos(
                 SectionPos.blockToSectionCoord(this.entityPosition.x()),
                 SectionPos.blockToSectionCoord(this.entityPosition.z())
         ));
