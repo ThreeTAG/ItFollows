@@ -82,7 +82,7 @@ public class CursePlayerHandler {
             }
 
             if (this.entityPosition == null) {
-                this.entityPosition = TheEntity.getRandomPos(this.player.position(), distance, this.player.getRandom());
+                this.entityPosition = TheEntity.getRandomPos(this.player.level(), this.player.position(), distance, this.player.getRandom());
             }
 
             if (this.isEntityPosLoaded()) {

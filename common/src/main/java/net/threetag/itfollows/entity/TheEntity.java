@@ -10,8 +10,10 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.PathfinderMob;
@@ -185,11 +187,49 @@ public class TheEntity extends PathfinderMob implements EntitySpawnExtension {
         buf.writeNullable(this.targetId, (b, id) -> b.writeUUID(id));
     }
 
-    public static Vec3 getRandomPos(Vec3 center, int distance, RandomSource random) {
-        return new Vec3(
-                center.x() + random.nextIntBetweenInclusive(-distance, distance),
-                center.y(),
-                center.z() + random.nextIntBetweenInclusive(-distance, distance)
+    @Override
+    public void baseTick() {
+        super.baseTick();
+        if (this.level() instanceof ServerLevel && this.isInWater()) {
+            this.setAirSupply(300);
+        }
+    }
+
+    @Override
+    public boolean isPushedByFluid() {
+        return false;
+    }
+
+    @Override
+    public boolean canBeLeashed() {
+        return false;
+    }
+
+    @Override
+    public boolean isInvulnerableTo(ServerLevel serverLevel, DamageSource damageSource) {
+        if (damageSource.getEntity() instanceof Player player) {
+            return !player.isCreative();
+        }
+
+        return true;
+    }
+
+    public static Vec3 getRandomPos(Level level, Vec3 center, int distance, RandomSource random) {
+        var pos = new BlockPos(
+                (int) (center.x() + random.nextIntBetweenInclusive(-distance, distance)),
+                (int) center.y(),
+                (int) (center.z() + random.nextIntBetweenInclusive(-distance, distance))
         );
+
+        while (!level.getBlockState(pos.below()).getCollisionShape(level, pos).isEmpty()
+                || level.getBlockState(pos.below()).getCollisionShape(level, pos).isEmpty()) {
+            pos = pos.above();
+
+            if (pos.getY() >= level.getHeight()) {
+                return pos.getBottomCenter();
+            }
+        }
+
+        return pos.getBottomCenter();
     }
 }
