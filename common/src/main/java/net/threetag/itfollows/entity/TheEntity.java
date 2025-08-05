@@ -1,12 +1,8 @@
 package net.threetag.itfollows.entity;
 
 import com.google.common.collect.ImmutableList;
-import dev.architectury.extensions.network.EntitySpawnExtension;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
@@ -18,23 +14,18 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.storage.ValueInput;
-import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
+import net.threetag.itfollows.attachment.IFAttachments;
 import net.threetag.itfollows.entity.ai.goal.FollowTargetGoal;
 import net.threetag.itfollows.entity.disguise.DisguiseType;
-import net.threetag.itfollows.entity.disguise.DisguiseTypes;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Comparator;
 import java.util.UUID;
 
-public class TheEntity extends PathfinderMob implements EntitySpawnExtension {
+public class TheEntity extends PathfinderMob {
 
-    private static final EntityDataAccessor<DisguiseType> DISGUISE = SynchedEntityData.defineId(TheEntity.class, DisguiseType.ENTITY_DATA);
-
-    private UUID targetId;
     private Player targetPlayer;
     private int ticksSinceDisguiseUpdate;
     private long ticketTimer = 0L;
@@ -45,19 +36,13 @@ public class TheEntity extends PathfinderMob implements EntitySpawnExtension {
 
     public TheEntity(Player target) {
         this(IFEntityTypes.THE_ENTITY.get(), target.level());
-        this.targetId = target.getUUID();
+        this.setTargetId(target.getUUID());
         this.targetPlayer = target;
         this.setPos(target.position());
     }
 
     public static AttributeSupplier.Builder createMobAttributes() {
         return PathfinderMob.createMobAttributes().add(Attributes.ATTACK_DAMAGE, 666);
-    }
-
-    @Override
-    protected void defineSynchedData(SynchedEntityData.Builder builder) {
-        super.defineSynchedData(builder);
-        builder.define(DISGUISE, DisguiseTypes.PIG.get());
     }
 
     @Override
@@ -81,9 +66,17 @@ public class TheEntity extends PathfinderMob implements EntitySpawnExtension {
         super.tick();
 
         if (!this.level().isClientSide) {
+
+            // fix sync issue
+            if (this.tickCount <= 1) {
+                var target = this.getTargetId();
+                this.setTargetId(null);
+                this.setTargetId(target);
+            }
+
             this.ticksSinceDisguiseUpdate++;
 
-            if (this.ticksSinceDisguiseUpdate > 200) {
+            if (this.ticksSinceDisguiseUpdate > 200 || this.getDisguiseType() == null) {
                 var target = this.getTargetPlayer();
 
                 if (target instanceof ServerPlayer player) {
@@ -138,48 +131,32 @@ public class TheEntity extends PathfinderMob implements EntitySpawnExtension {
 
     @Nullable
     public Player getTargetPlayer() {
-        if ((this.targetPlayer == null || this.targetPlayer.isRemoved()) && this.targetId != null) {
-            this.targetPlayer = this.level().getPlayerByUUID(this.targetId);
+        if ((this.targetPlayer == null || this.targetPlayer.isRemoved()) && this.getTargetId() != null) {
+            this.targetPlayer = this.level().getPlayerByUUID(this.getTargetId());
         }
 
         return this.targetPlayer;
     }
 
+    public void setTargetId(UUID targetId) {
+        IFAttachments.TARGET_ID.set(this, targetId);
+    }
+
+    public UUID getTargetId() {
+        return IFAttachments.TARGET_ID.get(this);
+    }
+
     private void setDisguiseType(DisguiseType disguiseType) {
-        this.entityData.set(DISGUISE, disguiseType);
+        IFAttachments.DISGUISE_TYPE.set(this, disguiseType);
     }
 
     public DisguiseType getDisguiseType() {
-        return this.entityData.get(DISGUISE);
+        return IFAttachments.DISGUISE_TYPE.get(this);
     }
 
     @Override
     public boolean isInvisibleTo(Player player) {
         return player != this.targetPlayer;
-    }
-
-    @Override
-    protected void readAdditionalSaveData(ValueInput valueInput) {
-        super.readAdditionalSaveData(valueInput);
-        this.targetId = valueInput.getString("target").map(UUID::fromString).orElse(null);
-    }
-
-    @Override
-    protected void addAdditionalSaveData(ValueOutput valueOutput) {
-        super.addAdditionalSaveData(valueOutput);
-        if (this.targetId != null) {
-            valueOutput.putString("target", this.targetId.toString());
-        }
-    }
-
-    @Override
-    public void saveAdditionalSpawnData(FriendlyByteBuf buf) {
-        this.targetId = buf.readNullable(b -> b.readUUID());
-    }
-
-    @Override
-    public void loadAdditionalSpawnData(FriendlyByteBuf buf) {
-        buf.writeNullable(this.targetId, (b, id) -> b.writeUUID(id));
     }
 
     @Override
@@ -210,18 +187,15 @@ public class TheEntity extends PathfinderMob implements EntitySpawnExtension {
     }
 
     public static Vec3 getRandomPos(Level level, Vec3 center, int distance, RandomSource random) {
-        var pos = new BlockPos(
-                (int) (center.x() + random.nextIntBetweenInclusive(-distance, distance)),
-                (int) center.y(),
-                (int) (center.z() + random.nextIntBetweenInclusive(-distance, distance))
-        );
+        Vec3 distanced = new Vec3(distance, 0, 0).yRot((float) Math.toRadians(random.nextInt(360)));
+        var pos = new BlockPos((int) center.x(), (int) center.y(), (int) center.z()).offset((int) distanced.x, 0, (int) distanced.z);
 
-        while (!level.getBlockState(pos.below()).getCollisionShape(level, pos).isEmpty()
+        while (!level.getBlockState(pos).getCollisionShape(level, pos).isEmpty()
                 || level.getBlockState(pos.below()).getCollisionShape(level, pos).isEmpty()) {
-            pos = pos.above();
+            pos = pos.below();
 
-            if (pos.getY() >= level.getHeight()) {
-                return pos.getBottomCenter();
+            if (pos.getY() <= 0) {
+                return pos.offset(0, (int) center.y, 0).getBottomCenter();
             }
         }
 

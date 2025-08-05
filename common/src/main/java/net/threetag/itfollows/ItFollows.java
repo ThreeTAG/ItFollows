@@ -17,6 +17,7 @@ public final class ItFollows {
         IFTicketTypes.TICKET_TYPES.register();
 
         IFEntityTypes.init();
+        IFEventHandler.init();
 
         CommandRegistrationEvent.EVENT.register((commandDispatcher, commandBuildContext, commandSelection) -> {
             ItFollowsCommand.register(commandDispatcher);

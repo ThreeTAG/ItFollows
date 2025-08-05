@@ -1,13 +1,15 @@
 package net.threetag.itfollows.mixin;
 
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.threetag.itfollows.entity.CursePlayerHandler;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import net.minecraft.server.level.ServerPlayer;
 
 @Mixin(ServerPlayer.class)
 public class ServerPlayerMixin implements CursePlayerHandler.Curseable {
@@ -21,14 +23,13 @@ public class ServerPlayerMixin implements CursePlayerHandler.Curseable {
     }
 
     @Inject(method = "readAdditionalSaveData", at = @At("TAIL"))
-    private void read(CompoundTag compoundTag, CallbackInfo ci) {
-        var nbt = compoundTag.getCompoundOrEmpty("it_follows:curse_handler");
-        this.it_follows$cursePlayerHandler.read(nbt);
+    private void read(ValueInput valueInput, CallbackInfo ci) {
+        this.it_follows$cursePlayerHandler.read(valueInput.childOrEmpty("it_follows:curse_handler"));
     }
 
     @Inject(method = "addAdditionalSaveData", at = @At("TAIL"))
-    private void write(CompoundTag compoundTag, CallbackInfo ci) {
-        compoundTag.put("it_follows:curse_handler", this.it_follows$cursePlayerHandler.write());
+    private void write(ValueOutput valueOutput, CallbackInfo ci) {
+        this.it_follows$cursePlayerHandler.write(valueOutput.child("it_follows:curse_handler"));
     }
 
     @Inject(method = "tick", at = @At("RETURN"))

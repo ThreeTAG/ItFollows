@@ -2,11 +2,12 @@ package net.threetag.itfollows.entity;
 
 import net.minecraft.core.SectionPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtOps;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.TicketType;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 
 public class CursePlayerHandler {
@@ -24,20 +25,16 @@ public class CursePlayerHandler {
         this.player = player;
     }
 
-    public void read(CompoundTag nbt) {
-        this.curseActive = nbt.getBooleanOr("curse_active", false);
-        this.lastKnownEntityId = nbt.getIntOr("last_known_entity_id", -1);
-        this.entityPosition = nbt.contains("entity_position") ? Vec3.CODEC.parse(NbtOps.INSTANCE, nbt.get("entity_position")).getOrThrow() : null;
+    public void read(ValueInput input) {
+        this.curseActive = input.getBooleanOr("curse_active", false);
+        this.lastKnownEntityId = input.getIntOr("last_known_entity_id", -1);
+        this.entityPosition = input.read("entity_position", Vec3.CODEC).orElse(null);
     }
 
-    public CompoundTag write() {
-        var nbt = new CompoundTag();
-        nbt.putBoolean("curse_active", this.curseActive);
-        nbt.putInt("last_known_entity_id", this.lastKnownEntityId);
-        if (this.entityPosition != null) {
-            nbt.put("entity_position", Vec3.CODEC.encodeStart(NbtOps.INSTANCE, this.entityPosition).getOrThrow());
-        }
-        return nbt;
+    public void write(ValueOutput output) {
+        output.putBoolean("curse_active", this.curseActive);
+        output.putInt("last_known_entity_id", this.lastKnownEntityId);
+        output.storeNullable("entity_position", Vec3.CODEC, this.entityPosition);
     }
 
     public void tick() {
