@@ -56,6 +56,7 @@ public class TheEntity extends PathfinderMob {
         return PathfinderMob.createMobAttributes()
                 .add(Attributes.MOVEMENT_SPEED, 0.23F)
                 .add(Attributes.ATTACK_DAMAGE, 666)
+                .add(Attributes.FOLLOW_RANGE, 128)
                 .add(Attributes.STEP_HEIGHT, 1.0);
     }
 
