@@ -1,5 +1,7 @@
 package net.threetag.itfollows.client.renderer.disguise;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -30,6 +32,28 @@ public abstract class DisguiseRenderer<S extends LivingEntityRenderState, M exte
     public abstract M getModel();
 
     public abstract ResourceLocation getTexture();
+
+    public void setupRotations(S renderState, PoseStack poseStack, float bodyRot, float scale) {
+        if (!renderState.hasPose(Pose.SLEEPING)) {
+            poseStack.mulPose(Axis.YP.rotationDegrees(180.0F - bodyRot));
+        }
+
+        if (renderState.deathTime > 0.0F) {
+            float f = (renderState.deathTime - 1.0F) / 20.0F * 1.6F;
+            f = Mth.sqrt(f);
+            if (f > 1.0F) {
+                f = 1.0F;
+            }
+
+            poseStack.mulPose(Axis.ZP.rotationDegrees(f * 90F));
+        } else if (renderState.isAutoSpinAttack) {
+            poseStack.mulPose(Axis.XP.rotationDegrees(-90.0F - renderState.xRot));
+            poseStack.mulPose(Axis.YP.rotationDegrees(renderState.ageInTicks * -75.0F));
+        } else if (renderState.isUpsideDown) {
+            poseStack.translate(0.0F, (renderState.boundingBoxHeight + 0.1F) / scale, 0.0F);
+            poseStack.mulPose(Axis.ZP.rotationDegrees(180.0F));
+        }
+    }
 
     public abstract S createRenderState();
 

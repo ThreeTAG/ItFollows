@@ -31,7 +31,20 @@ subprojects {
 
     dependencies {
         minecraft "net.minecraft:minecraft:$rootProject.minecraft_version"
-        mappings loom.officialMojangMappings()
+        mappings loom.layered() {
+            officialMojangMappings()
+            parchment("org.parchmentmc.data:parchment-${rootProject.mappings}")
+        }
+    }
+
+    repositories {
+        // Parchment
+        maven {
+            url = 'https://maven.parchmentmc.net/'
+            content {
+                includeGroup 'org.parchmentmc.data'
+            }
+        }
     }
 
     java {

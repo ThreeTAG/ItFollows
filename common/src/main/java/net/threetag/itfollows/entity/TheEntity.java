@@ -5,15 +5,19 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.HumanoidArm;
-import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.control.MoveControl;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.navigation.AmphibiousPathNavigation;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
 import net.threetag.itfollows.attachment.IFAttachments;
 import net.threetag.itfollows.entity.ai.goal.FollowTargetGoal;
@@ -39,16 +43,27 @@ public class TheEntity extends PathfinderMob {
         this.setTargetId(target.getUUID());
         this.targetPlayer = target;
         this.setPos(target.position());
+        this.moveControl = new TheEntityMoveControl(this);
+        this.setPathfindingMalus(PathType.WATER, 0.0F);
+    }
+
+    @Override
+    protected PathNavigation createNavigation(Level level) {
+        return new AmphibiousPathNavigation(this, level);
     }
 
     public static AttributeSupplier.Builder createMobAttributes() {
-        return PathfinderMob.createMobAttributes().add(Attributes.ATTACK_DAMAGE, 666);
+        return PathfinderMob.createMobAttributes()
+                .add(Attributes.MOVEMENT_SPEED, 0.23F)
+                .add(Attributes.ATTACK_DAMAGE, 666)
+                .add(Attributes.STEP_HEIGHT, 1.0);
     }
 
     @Override
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(1, new FollowTargetGoal(this));
+        this.goalSelector.addGoal(5, new MeleeAttackGoal(this, 1F, true));
     }
 
     @Override
@@ -59,6 +74,29 @@ public class TheEntity extends PathfinderMob {
     @Override
     public boolean removeWhenFarAway(double d) {
         return false;
+    }
+
+    @Override
+    public void travel(Vec3 travelVector) {
+        if (this.isUnderWater()) {
+            this.moveRelative(0.01F, travelVector);
+            this.move(MoverType.SELF, this.getDeltaMovement());
+            this.setDeltaMovement(this.getDeltaMovement().scale(0.9));
+        } else {
+            super.travel(travelVector);
+        }
+    }
+
+    @Override
+    public void updateSwimming() {
+        if (!this.level().isClientSide) {
+            this.setSwimming(this.isInWater());
+        }
+    }
+
+    @Override
+    public boolean isVisuallySwimming() {
+        return this.isSwimming();
     }
 
     @Override
@@ -200,5 +238,46 @@ public class TheEntity extends PathfinderMob {
         }
 
         return pos.getBottomCenter();
+    }
+
+    static class TheEntityMoveControl extends MoveControl {
+
+        private final TheEntity drowned;
+
+        public TheEntityMoveControl(TheEntity drowned) {
+            super(drowned);
+            this.drowned = drowned;
+        }
+
+        @Override
+        public void tick() {
+            LivingEntity livingEntity = this.drowned.getTarget();
+            if (this.drowned.isInWater()) {
+                if (livingEntity != null && livingEntity.getY() > this.drowned.getY()) {
+                    this.drowned.setDeltaMovement(this.drowned.getDeltaMovement().add(0.0, 0.002, 0.0));
+                }
+
+                if (this.drowned.getNavigation().isDone()) {
+                    this.drowned.setSpeed(0.0F);
+                    return;
+                }
+
+                double d = this.wantedX - this.drowned.getX();
+                double e = this.wantedY - this.drowned.getY();
+                double f = this.wantedZ - this.drowned.getZ();
+                double g = Math.sqrt(d * d + e * e + f * f);
+                e /= g;
+                float h = (float) (Mth.atan2(f, d) * 180.0F / (float) Math.PI) - 90.0F;
+                this.drowned.setYRot(this.rotlerp(this.drowned.getYRot(), h, 90.0F));
+                this.drowned.yBodyRot = this.drowned.getYRot();
+                float i = (float) (this.speedModifier * this.drowned.getAttributeValue(Attributes.MOVEMENT_SPEED));
+                float j = Mth.lerp(0.125F, this.drowned.getSpeed(), i);
+                this.drowned.setSpeed(j * 2);
+                this.drowned.setDeltaMovement(this.drowned.getDeltaMovement().add(j * d * 0.005, j * e * 0.1, j * f * 0.005));
+                super.tick();
+            } else {
+                super.tick();
+            }
+        }
     }
 }

@@ -40,7 +40,7 @@ public class FollowTargetGoal extends Goal {
 
             if (--this.timeToRecalcPath <= 0) {
                 this.timeToRecalcPath = this.adjustedTickDelay(10);
-                this.navigation.moveTo(target, 0.3);
+                this.navigation.moveTo(target, 1);
             }
         }
     }
