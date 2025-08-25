@@ -124,7 +124,7 @@ public class TheEntity extends PathfinderMob {
                         return;
                     }
 
-                    if (!this.isLookingAtMe(target, 0.5, true, true, this.getY(), this.getEyeY(), this.getY() + this.getBbHeight())) {
+                    if (!this.isLookingAtMe(target, 0.5, false, true, this.getY(), this.getEyeY(), this.getY() + this.getBbHeight())) {
                         for (DisguiseType disguiseType : ImmutableList.copyOf(DisguiseType.REGISTRY).stream()
                                 .sorted(Comparator.comparingInt(DisguiseType::getPriority).reversed()).toList()) {
                             if (disguiseType.isValid(this)) {
