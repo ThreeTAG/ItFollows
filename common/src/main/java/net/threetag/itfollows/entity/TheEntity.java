@@ -124,11 +124,13 @@ public class TheEntity extends PathfinderMob {
                         return;
                     }
 
-                    for (DisguiseType disguiseType : ImmutableList.copyOf(DisguiseType.REGISTRY).stream()
-                            .sorted(Comparator.comparingInt(DisguiseType::getPriority).reversed()).toList()) {
-                        if (disguiseType.isValid(this)) {
-                            this.setDisguiseType(disguiseType);
-                            break;
+                    if (!this.isLookingAtMe(target, 0.5, true, true, this.getY(), this.getEyeY(), this.getY() + this.getBbHeight())) {
+                        for (DisguiseType disguiseType : ImmutableList.copyOf(DisguiseType.REGISTRY).stream()
+                                .sorted(Comparator.comparingInt(DisguiseType::getPriority).reversed()).toList()) {
+                            if (disguiseType.isValid(this)) {
+                                this.setDisguiseType(disguiseType);
+                                break;
+                            }
                         }
                     }
                 } else {
