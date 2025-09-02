@@ -1,11 +1,12 @@
 package net.threetag.itfollows.entity;
 
 import net.minecraft.core.SectionPos;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.TicketType;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
@@ -20,6 +21,8 @@ public class CursePlayerHandler {
     private int lastKnownEntityId = -1;
     private Vec3 entityPosition = null;
     private int updateTimer = 0;
+    private int isStuckTimer = 0;
+    private Vec3 isStuckPositionTracker = null;
 
     public CursePlayerHandler(ServerPlayer player) {
         this.player = player;
@@ -40,6 +43,7 @@ public class CursePlayerHandler {
     public void tick() {
         if (this.curseActive) {
             this.updateTimer++;
+            this.isStuckTimer++;
 
             if (this.updateTimer >= 20) {
                 if (this.lastKnownEntity == null) {
@@ -51,6 +55,20 @@ public class CursePlayerHandler {
                 }
 
                 this.updateTimer = 0;
+            }
+
+            if (this.isStuckPositionTracker == null && this.lastKnownEntity != null) {
+                this.isStuckPositionTracker = this.lastKnownEntity.position();
+            }
+
+            if (this.isStuckTimer >= 20 * 30 && this.lastKnownEntity != null) {
+                var blocksTravelled = this.isStuckPositionTracker.distanceTo(this.lastKnownEntity.position());
+                this.isStuckPositionTracker = this.lastKnownEntity.position();
+                this.isStuckTimer = 0;
+                System.out.println("Blocks travelled: " + blocksTravelled);
+                if (blocksTravelled < 15) {
+                    this.breakBlocksInPath();
+                }
             }
         }
     }
@@ -101,6 +119,56 @@ public class CursePlayerHandler {
         }
 
         return false;
+    }
+
+    private void breakBlocksInPath() {
+        if (this.lastKnownEntity != null) {
+            var y = this.lastKnownEntity.getBlockY();
+            var playerY = this.player.getBlockY();
+            var diffVec = this.player.position().subtract(this.lastKnownEntity.position()).normalize();
+            var offset = new Vec3i(diffVec.x < -0.1 ? -1 : diffVec.x > 0.1 ? 1 : 0, 0, diffVec.z < -0.1 ? -1 : diffVec.z > 0.1 ? 1 : 0);
+
+            if (Math.abs(offset.getX()) == 1 && Math.abs(offset.getZ()) == 1) {
+                offset = new Vec3i(offset.getX(), 0, 0);
+            }
+
+            var blockPosInFront = this.lastKnownEntity.blockPosition().offset(offset);
+
+            if (y == playerY) {
+                this.player.level().destroyBlock(blockPosInFront, false, this.lastKnownEntity);
+                this.player.level().destroyBlock(blockPosInFront.above(), false, this.lastKnownEntity);
+
+                if (this.player.level().isEmptyBlock(blockPosInFront.below())) {
+                    this.player.level().setBlock(blockPosInFront.below(), Blocks.DIRT.defaultBlockState(), 3);
+                }
+            } else if (y < playerY) {
+                if (this.player.getBlockX() == this.lastKnownEntity.getBlockX() && this.player.getBlockZ() == this.lastKnownEntity.getBlockZ()) {
+                    this.lastKnownEntity.jumpFromGround();
+                    this.player.level().setBlock(this.lastKnownEntity.blockPosition(), Blocks.DIRT.defaultBlockState(), 3);
+                    this.player.level().destroyBlock(this.lastKnownEntity.blockPosition().above(2), false, this.lastKnownEntity);
+                } else {
+                    this.player.level().destroyBlock(blockPosInFront.above(), false, this.lastKnownEntity);
+                    this.player.level().destroyBlock(blockPosInFront.above(2), false, this.lastKnownEntity);
+                    this.player.level().destroyBlock(blockPosInFront.above(3), false, this.lastKnownEntity);
+
+                    if (this.player.level().isEmptyBlock(blockPosInFront)) {
+                        this.player.level().setBlock(blockPosInFront, Blocks.DIRT.defaultBlockState(), 3);
+                    }
+                }
+            } else {
+                if (this.player.getBlockX() == this.lastKnownEntity.getBlockX() && this.player.getBlockZ() == this.lastKnownEntity.getBlockZ()) {
+                    this.player.level().destroyBlock(this.lastKnownEntity.blockPosition().below(), false, this.lastKnownEntity);
+                } else {
+                    this.player.level().destroyBlock(blockPosInFront.above(), false, this.lastKnownEntity);
+                    this.player.level().destroyBlock(blockPosInFront, false, this.lastKnownEntity);
+                    this.player.level().destroyBlock(blockPosInFront.below(), false, this.lastKnownEntity);
+                }
+
+                if (this.player.level().isEmptyBlock(blockPosInFront.below(2))) {
+                    this.player.level().setBlock(blockPosInFront.below(2), Blocks.DIRT.defaultBlockState(), 3);
+                }
+            }
+        }
     }
 
     public boolean isEntityPosLoaded() {

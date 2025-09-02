@@ -229,7 +229,7 @@ public class TheEntity extends PathfinderMob {
 
     public static Vec3 getRandomPos(Level level, Vec3 center, int distance, RandomSource random) {
         Vec3 distanced = new Vec3(distance, 0, 0).yRot((float) Math.toRadians(random.nextInt(360)));
-        var pos = new BlockPos((int) center.x(), (int) center.y(), (int) center.z()).offset((int) distanced.x, 0, (int) distanced.z);
+        var pos = new BlockPos((int) center.x(), level.getHeight(), (int) center.z()).offset((int) distanced.x, 0, (int) distanced.z);
 
         while (!level.getBlockState(pos).getCollisionShape(level, pos).isEmpty()
                 || level.getBlockState(pos.below()).getCollisionShape(level, pos).isEmpty()) {
