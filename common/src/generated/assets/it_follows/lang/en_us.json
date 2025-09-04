@@ -3,5 +3,9 @@
   "commands.it_follows.start_curse.error.already_started": "%s already has an active curse",
   "commands.it_follows.start_curse.success": "%s received the curse",
   "commands.it_follows.stop_curse.error.no_active_curse": "%s has no curse",
-  "commands.it_follows.stop_curse.success": "%s no longer has the curse"
+  "commands.it_follows.stop_curse.success": "%s no longer has the curse",
+  "it_follows.midnightconfig.BLOCK_BREAK_INTERVAL": "Block Break Interval",
+  "it_follows.midnightconfig.MOVEMENT_SPEED": "Movement Speed",
+  "it_follows.midnightconfig.category.entity": "Entity Settings",
+  "it_follows.midnightconfig.title": "It Follows"
 }

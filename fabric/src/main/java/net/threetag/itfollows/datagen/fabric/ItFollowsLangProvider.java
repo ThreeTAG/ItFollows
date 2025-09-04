@@ -3,6 +3,8 @@ package net.threetag.itfollows.datagen.fabric;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.minecraft.core.HolderLookup;
+import net.threetag.itfollows.IFConfig;
+import net.threetag.itfollows.ItFollows;
 import net.threetag.itfollows.command.ItFollowsCommand;
 
 import java.util.concurrent.CompletableFuture;
@@ -26,6 +28,11 @@ public abstract class ItFollowsLangProvider extends FabricLanguageProvider {
             builder.add(ItFollowsCommand.ERROR_NO_ACTIVE_CURSE, "%s has no curse");
             builder.add(ItFollowsCommand.STOP_CURSE_SUCCESS, "%s no longer has the curse");
             builder.add(ItFollowsCommand.POSITION, "%s's entity is at %s (%s blocks away)");
+
+            this.addConfigTitle(builder, "It Follows");
+            this.addConfigCategory(builder, IFConfig.CATEGORY_ENTITY, "Entity Settings");
+            this.addConfigEntry(builder, "MOVEMENT_SPEED", "Movement Speed");
+            this.addConfigEntry(builder, "BLOCK_BREAK_INTERVAL", "Block Break Interval");
         }
     }
 
@@ -42,6 +49,11 @@ public abstract class ItFollowsLangProvider extends FabricLanguageProvider {
             builder.add(ItFollowsCommand.ERROR_NO_ACTIVE_CURSE, "%s hat keinen Fluch");
             builder.add(ItFollowsCommand.STOP_CURSE_SUCCESS, "%s hat nun den Fluch nicht mehr");
             builder.add(ItFollowsCommand.POSITION, "%s's Entität ist bei %s (%s Blöcke entfernt)");
+
+            this.addConfigTitle(builder, "It Follows");
+            this.addConfigCategory(builder, IFConfig.CATEGORY_ENTITY, "Entitätseinstellungen");
+            this.addConfigEntry(builder, "MOVEMENT_SPEED", "Bewegungsgeschwindigkeit");
+            this.addConfigEntry(builder, "BLOCK_BREAK_INTERVAL", "Blockbruchintervall");
         }
     }
 
@@ -58,6 +70,23 @@ public abstract class ItFollowsLangProvider extends FabricLanguageProvider {
             builder.add(ItFollowsCommand.ERROR_NO_ACTIVE_CURSE, "%s hat keenen Fluch");
             builder.add(ItFollowsCommand.STOP_CURSE_SUCCESS, "%s hat nu keenen Fluch mehr");
             builder.add(ItFollowsCommand.POSITION, "%s's Entität is bei %s (%s Blögge endfernd)");
+
+            this.addConfigTitle(builder, "It Follows");
+            this.addConfigCategory(builder, IFConfig.CATEGORY_ENTITY, "Entitätseinstellungen");
+            this.addConfigEntry(builder, "MOVEMENT_SPEED", "Bewejungsjeschwindichgehd");
+            this.addConfigEntry(builder, "BLOCK_BREAK_INTERVAL", "Blockbruchintervall");
         }
+    }
+
+    public void addConfigTitle(TranslationBuilder builder, String name) {
+        builder.add(ItFollows.MOD_ID + ".midnightconfig.title", name);
+    }
+
+    public void addConfigCategory(TranslationBuilder builder, String key, String name) {
+        builder.add(ItFollows.MOD_ID + ".midnightconfig.category." + key, name);
+    }
+
+    public void addConfigEntry(TranslationBuilder builder, String key, String name) {
+        builder.add(ItFollows.MOD_ID + ".midnightconfig." + key, name);
     }
 }

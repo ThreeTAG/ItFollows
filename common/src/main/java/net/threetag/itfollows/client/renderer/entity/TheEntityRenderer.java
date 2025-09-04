@@ -17,6 +17,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ARGB;
 import net.minecraft.world.entity.Pose;
+import net.minecraft.world.item.DebugStickItem;
 import net.threetag.itfollows.client.renderer.disguise.DisguiseRendererRegistry;
 import net.threetag.itfollows.entity.TheEntity;
 import net.threetag.itfollows.entity.disguise.DisguiseType;
@@ -58,7 +59,8 @@ public class TheEntityRenderer extends LivingEntityRenderer<TheEntity, LivingEnt
             model.setupAnim(state);
             boolean bl = this.isBodyVisible(state);
             boolean bl2 = !bl && !state.isInvisibleToPlayer;
-            RenderType renderType = this.getRenderType(state, bl, bl2, state.appearsGlowing);
+            boolean highlight = Minecraft.getInstance().player.getMainHandItem().getItem() instanceof DebugStickItem;
+            RenderType renderType = this.getRenderType(state, !highlight && bl, !highlight && bl2, highlight || state.appearsGlowing);
             if (renderType != null) {
                 VertexConsumer vertexConsumer = multiBufferSource.getBuffer(renderType);
                 int j = getOverlayCoords(state, this.getWhiteOverlayProgress(state));

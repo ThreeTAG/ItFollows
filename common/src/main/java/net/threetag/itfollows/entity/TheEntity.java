@@ -13,12 +13,14 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.OpenDoorGoal;
 import net.minecraft.world.entity.ai.navigation.AmphibiousPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
+import net.threetag.itfollows.IFConfig;
 import net.threetag.itfollows.attachment.IFAttachments;
 import net.threetag.itfollows.entity.ai.goal.FollowTargetGoal;
 import net.threetag.itfollows.entity.disguise.DisguiseType;
@@ -55,7 +57,7 @@ public class TheEntity extends PathfinderMob {
 
     public static AttributeSupplier.Builder createMobAttributes() {
         return PathfinderMob.createMobAttributes()
-                .add(Attributes.MOVEMENT_SPEED, 0.23F)
+                .add(Attributes.MOVEMENT_SPEED, IFConfig.MOVEMENT_SPEED)
                 .add(Attributes.ATTACK_DAMAGE, 666)
                 .add(Attributes.FOLLOW_RANGE, 128)
                 .add(Attributes.STEP_HEIGHT, 1.0);
@@ -64,7 +66,8 @@ public class TheEntity extends PathfinderMob {
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(1, new FollowTargetGoal(this));
+        this.goalSelector.addGoal(1, new OpenDoorGoal(this, false));
+        this.goalSelector.addGoal(2, new FollowTargetGoal(this));
         this.goalSelector.addGoal(5, new MeleeAttackGoal(this, 1F, true));
     }
 

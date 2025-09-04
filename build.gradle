@@ -45,6 +45,11 @@ subprojects {
                 includeGroup 'org.parchmentmc.data'
             }
         }
+
+        // Modrinth
+        maven {
+            url = 'https://api.modrinth.com/maven'
+        }
     }
 
     java {

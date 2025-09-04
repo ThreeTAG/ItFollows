@@ -1,6 +1,7 @@
 package net.threetag.itfollows;
 
 import dev.architectury.event.events.common.CommandRegistrationEvent;
+import eu.midnightdust.lib.config.MidnightConfig;
 import net.minecraft.resources.ResourceLocation;
 import net.threetag.itfollows.command.ItFollowsCommand;
 import net.threetag.itfollows.entity.IFEntityTypes;
@@ -12,6 +13,8 @@ public final class ItFollows {
     public static final String MOD_ID = "it_follows";
 
     public static void init() {
+        MidnightConfig.init(MOD_ID, IFConfig.class);
+
         IFEntityTypes.ENTITY_TYPES.register();
         DisguiseTypes.DISGUISE_TYPES.register();
         IFTicketTypes.TICKET_TYPES.register();

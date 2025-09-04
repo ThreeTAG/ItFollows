@@ -10,6 +10,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
+import net.threetag.itfollows.IFConfig;
 
 public class CursePlayerHandler {
 
@@ -61,12 +62,12 @@ public class CursePlayerHandler {
                 this.isStuckPositionTracker = this.lastKnownEntity.position();
             }
 
-            if (this.isStuckTimer >= 20 * 30 && this.lastKnownEntity != null) {
+            if (this.isStuckTimer >= 20 * IFConfig.BLOCK_BREAK_INTERVAL && this.lastKnownEntity != null) {
                 var blocksTravelled = this.isStuckPositionTracker.distanceTo(this.lastKnownEntity.position());
                 this.isStuckPositionTracker = this.lastKnownEntity.position();
                 this.isStuckTimer = 0;
-                System.out.println("Blocks travelled: " + blocksTravelled);
-                if (blocksTravelled < 15) {
+
+                if (blocksTravelled < IFConfig.BLOCK_BREAK_INTERVAL / 2D) {
                     this.breakBlocksInPath();
                 }
             }
