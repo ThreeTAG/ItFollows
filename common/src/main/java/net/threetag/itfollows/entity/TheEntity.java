@@ -45,6 +45,7 @@ public class TheEntity extends PathfinderMob {
         this.setPos(target.position());
         this.moveControl = new TheEntityMoveControl(this);
         this.setPathfindingMalus(PathType.WATER, 0.0F);
+        this.getNavigation().setCanOpenDoors(true);
     }
 
     @Override
