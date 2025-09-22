@@ -2,7 +2,6 @@ package net.threetag.itfollows.entity;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.SectionPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
@@ -12,17 +11,19 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
-import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.OpenDoorGoal;
 import net.minecraft.world.entity.ai.navigation.AmphibiousPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.pathfinder.PathType;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 import net.threetag.itfollows.IFConfig;
 import net.threetag.itfollows.attachment.IFAttachments;
 import net.threetag.itfollows.entity.ai.goal.FollowTargetGoal;
+import net.threetag.itfollows.entity.ai.goal.KillTargetGoal;
 import net.threetag.itfollows.entity.disguise.DisguiseType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -34,7 +35,7 @@ public class TheEntity extends PathfinderMob {
 
     private Player targetPlayer;
     private int ticksSinceDisguiseUpdate;
-    private long ticketTimer = 0L;
+    private boolean markedForRemoval = false;
 
     public TheEntity(EntityType<? extends PathfinderMob> entityType, Level level) {
         super(entityType, level);
@@ -66,9 +67,10 @@ public class TheEntity extends PathfinderMob {
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(1, new OpenDoorGoal(this, false));
-        this.goalSelector.addGoal(2, new FollowTargetGoal(this));
-        this.goalSelector.addGoal(5, new MeleeAttackGoal(this, 1F, true));
+
+        this.goalSelector.addGoal(1, new KillTargetGoal(this));
+        this.goalSelector.addGoal(2, new OpenDoorGoal(this, false));
+        this.goalSelector.addGoal(3, new FollowTargetGoal(this));
     }
 
     @Override
@@ -109,6 +111,10 @@ public class TheEntity extends PathfinderMob {
         super.tick();
 
         if (!this.level().isClientSide) {
+            if (this.markedForRemoval) {
+                this.discard();
+                return;
+            }
 
             // fix sync issue
             if (this.tickCount <= 1) {
@@ -144,29 +150,30 @@ public class TheEntity extends PathfinderMob {
 
                 this.ticksSinceDisguiseUpdate = 0;
             }
-
-            if (this.isAlive()) {
-                BlockPos blockPos = BlockPos.containing(this.position());
-                int i = SectionPos.blockToSectionCoord(this.position().x());
-                int j = SectionPos.blockToSectionCoord(this.position().z());
-
-                if ((--this.ticketTimer <= 0L || i != SectionPos.blockToSectionCoord(blockPos.getX()) || j != SectionPos.blockToSectionCoord(blockPos.getZ()))
-                        && this.getTargetPlayer() instanceof ServerPlayer serverPlayer) {
-                    var handler = CursePlayerHandler.get(serverPlayer);
-                    this.ticketTimer = handler.registerAndUpdateTicket(this);
-                }
-            }
         }
     }
 
     @Override
     public void onRemoval(RemovalReason removalReason) {
         super.onRemoval(removalReason);
+        this.markedForRemoval = true;
         var target = this.getTargetPlayer();
 
         if (target instanceof ServerPlayer player) {
             CursePlayerHandler.get(player).removeEntity(this);
         }
+    }
+
+    @Override
+    protected void readAdditionalSaveData(ValueInput input) {
+        super.readAdditionalSaveData(input);
+        this.markedForRemoval = input.getBooleanOr("marked_for_removal", false);
+    }
+
+    @Override
+    protected void addAdditionalSaveData(ValueOutput output) {
+        super.addAdditionalSaveData(output);
+        output.putBoolean("marked_for_removal", this.markedForRemoval);
     }
 
     @Override
@@ -223,12 +230,12 @@ public class TheEntity extends PathfinderMob {
     }
 
     @Override
-    public boolean isInvulnerableTo(ServerLevel serverLevel, DamageSource damageSource) {
-        if (damageSource.getEntity() instanceof Player player) {
-            return !player.isCreative();
+    public boolean hurtServer(ServerLevel level, DamageSource damageSource, float amount) {
+        if (damageSource.getEntity() instanceof Player player && !player.isCreative()) {
+            return true;
         }
 
-        return true;
+        return super.hurtServer(level, damageSource, amount);
     }
 
     public static Vec3 getRandomPos(Level level, Vec3 center, int distance, RandomSource random) {

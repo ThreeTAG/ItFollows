@@ -2,9 +2,7 @@ package net.threetag.itfollows.entity;
 
 import net.minecraft.core.SectionPos;
 import net.minecraft.core.Vec3i;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.level.TicketType;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.storage.ValueInput;
@@ -109,10 +107,6 @@ public class CursePlayerHandler {
 
                 if (spawned) {
                     this.lastKnownEntityId = this.lastKnownEntity.getId();
-                    placeTicket(this.player.level(), new ChunkPos(
-                            SectionPos.blockToSectionCoord(this.entityPosition.x()),
-                            SectionPos.blockToSectionCoord(this.entityPosition.z())
-                    ));
                 }
 
                 return spawned;
@@ -209,22 +203,6 @@ public class CursePlayerHandler {
 
     public Vec3 getEntityPosition() {
         return this.entityPosition;
-    }
-
-    public long registerAndUpdateTicket(TheEntity theEntity) {
-        if (theEntity.level() instanceof ServerLevel serverLevel) {
-            ChunkPos chunkPos = theEntity.chunkPosition();
-            this.setLastKnownEntity(theEntity);
-            serverLevel.resetEmptyTime();
-            return placeTicket(serverLevel, chunkPos) - 1L;
-        } else {
-            return 0L;
-        }
-    }
-
-    public static long placeTicket(ServerLevel serverLevel, ChunkPos chunkPos) {
-        serverLevel.getChunkSource().addTicketWithRadius(IFTicketTypes.THE_ENTITY.get(), chunkPos, 2);
-        return TicketType.ENDER_PEARL.timeout();
     }
 
     public static CursePlayerHandler get(ServerPlayer player) {
