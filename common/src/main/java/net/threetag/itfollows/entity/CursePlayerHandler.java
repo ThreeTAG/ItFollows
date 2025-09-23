@@ -13,6 +13,7 @@ import net.threetag.itfollows.IFConfig;
 public class CursePlayerHandler {
 
     public static final int DEFAULT_DISTANCE = 2000;
+    public static final int DESPAWN_DISTANCE = 100;
 
     private final ServerPlayer player;
     private boolean curseActive = false;
@@ -45,6 +46,10 @@ public class CursePlayerHandler {
             this.isStuckTimer++;
 
             if (this.updateTimer >= 20) {
+                if (this.lastKnownEntity != null && (this.lastKnownEntity.isRemoved() || this.lastKnownEntity.position().distanceTo(this.player.position()) > DESPAWN_DISTANCE)) {
+                    this.removeEntity(this.lastKnownEntity);
+                }
+
                 if (this.lastKnownEntity == null) {
                     this.lastKnownEntityId = -1;
 
@@ -100,7 +105,7 @@ public class CursePlayerHandler {
                 this.entityPosition = TheEntity.getRandomPos(this.player.level(), this.player.position(), distance, this.player.getRandom());
             }
 
-            if (this.isEntityPosLoaded()) {
+            if (this.entityPosition.distanceTo(this.player.position()) < DESPAWN_DISTANCE && this.isEntityPosLoaded()) {
                 this.lastKnownEntity = new TheEntity(this.player);
                 this.lastKnownEntity.setPos(this.entityPosition);
                 boolean spawned = this.player.level().addWithUUID(this.lastKnownEntity);
