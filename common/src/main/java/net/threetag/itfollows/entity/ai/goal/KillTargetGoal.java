@@ -16,7 +16,7 @@ public class KillTargetGoal extends Goal {
     @Override
     public boolean canUse() {
         var target = this.entity.getTargetPlayer();
-        return target != null && target.distanceTo(this.entity) <= 1;
+        return target != null && target.distanceTo(this.entity) <= 2;
     }
 
     @Override
