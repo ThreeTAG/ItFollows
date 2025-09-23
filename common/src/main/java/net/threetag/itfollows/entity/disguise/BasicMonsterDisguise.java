@@ -3,7 +3,7 @@ package net.threetag.itfollows.entity.disguise;
 import net.minecraft.world.level.LightLayer;
 import net.threetag.itfollows.entity.TheEntity;
 
-public class ZombieDisguise extends DisguiseType {
+public class BasicMonsterDisguise extends DisguiseType {
 
     @Override
     public boolean isValid(TheEntity entity) {
@@ -16,3 +16,4 @@ public class ZombieDisguise extends DisguiseType {
         return 30;
     }
 }
+

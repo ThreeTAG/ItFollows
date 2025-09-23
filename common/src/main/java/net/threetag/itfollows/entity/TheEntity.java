@@ -1,6 +1,5 @@
 package net.threetag.itfollows.entity;
 
-import com.google.common.collect.ImmutableList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -28,7 +27,6 @@ import net.threetag.itfollows.entity.disguise.DisguiseType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Comparator;
 import java.util.UUID;
 
 public class TheEntity extends PathfinderMob {
@@ -139,13 +137,7 @@ public class TheEntity extends PathfinderMob {
                     }
 
                     if (!this.isLookingAtMe(target, 0.5, false, true, this.getY(), this.getEyeY(), this.getY() + this.getBbHeight())) {
-                        for (DisguiseType disguiseType : ImmutableList.copyOf(DisguiseType.REGISTRY).stream()
-                                .sorted(Comparator.comparingInt(DisguiseType::getPriority).reversed()).toList()) {
-                            if (disguiseType.isValid(this)) {
-                                this.setDisguiseType(disguiseType);
-                                break;
-                            }
-                        }
+                        this.setDisguiseType(DisguiseType.findDisguise(this, RandomSource.create()));
                     }
                 } else {
                     this.discard();
