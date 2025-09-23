@@ -116,6 +116,9 @@ public class TheEntity extends PathfinderMob {
                 return;
             }
 
+            // set full health
+            this.setHealth(this.getMaxHealth());
+
             // fix sync issue
             if (this.tickCount <= 1) {
                 var target = this.getTargetId();
@@ -231,10 +234,7 @@ public class TheEntity extends PathfinderMob {
 
     @Override
     public boolean hurtServer(ServerLevel level, DamageSource damageSource, float amount) {
-        if (damageSource.getEntity() instanceof Player player && !player.isCreative()) {
-            return true;
-        }
-
+        amount = 0.1F;
         return super.hurtServer(level, damageSource, amount);
     }
 
