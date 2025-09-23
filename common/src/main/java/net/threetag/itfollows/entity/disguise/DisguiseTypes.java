@@ -17,6 +17,7 @@ public class DisguiseTypes {
     public static final RegistrySupplier<PigDisguise> PIG = DISGUISE_TYPES.register("pig", PigDisguise::new);
     public static final RegistrySupplier<BasicMonsterDisguise> ZOMBIE = DISGUISE_TYPES.register("zombie", BasicMonsterDisguise::new);
     public static final RegistrySupplier<BasicMonsterDisguise> SKELETON = DISGUISE_TYPES.register("skeleton", BasicMonsterDisguise::new);
+    public static final RegistrySupplier<BasicMonsterDisguise> CREEPER = DISGUISE_TYPES.register("creeper", BasicMonsterDisguise::new);
     public static final RegistrySupplier<DrownedDisguise> DROWNED = DISGUISE_TYPES.register("drowned", DrownedDisguise::new);
 
     @Environment(EnvType.CLIENT)
@@ -24,6 +25,7 @@ public class DisguiseTypes {
         DisguiseRendererRegistry.register(PIG, PigDisguiseRenderer::new);
         DisguiseRendererRegistry.register(ZOMBIE, ZombieDisguiseRenderer::new);
         DisguiseRendererRegistry.register(SKELETON, SkeletonDisguiseRenderer::new);
+        DisguiseRendererRegistry.register(CREEPER, CreeperDisguiseRenderer::new);
         DisguiseRendererRegistry.register(DROWNED, DrownedDisguiseRenderer::new);
     }
 }
