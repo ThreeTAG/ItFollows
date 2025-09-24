@@ -7,5 +7,7 @@
   "it_follows.midnightconfig.BLOCK_BREAK_INTERVAL": "Blockbruchintervall",
   "it_follows.midnightconfig.MOVEMENT_SPEED": "Bewegungsgeschwindigkeit",
   "it_follows.midnightconfig.category.entity": "Entitätseinstellungen",
-  "it_follows.midnightconfig.title": "It Follows"
+  "it_follows.midnightconfig.title": "It Follows",
+  "item.it_follows.music_disc_solstice": "Schallplatte",
+  "jukebox_song.it_follows.solstice": "Disasterpeace - Title"
 }

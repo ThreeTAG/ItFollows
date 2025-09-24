@@ -1,0 +1,12 @@
+{
+  "music_disc_solstice": {
+    "category": "record",
+    "sounds": [
+      {
+        "name": "it_follows:records/solstice",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.it_follows.music_disc.solstice"
+  }
+}
