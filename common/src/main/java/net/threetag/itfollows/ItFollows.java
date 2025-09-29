@@ -3,6 +3,7 @@ package net.threetag.itfollows;
 import dev.architectury.event.events.common.CommandRegistrationEvent;
 import eu.midnightdust.lib.config.MidnightConfig;
 import net.minecraft.resources.ResourceLocation;
+import net.threetag.itfollows.advancements.IFCriteriaTriggers;
 import net.threetag.itfollows.command.ItFollowsCommand;
 import net.threetag.itfollows.entity.IFEntityTypes;
 import net.threetag.itfollows.entity.disguise.DisguiseTypes;
@@ -20,6 +21,7 @@ public final class ItFollows {
         IFSoundEvents.SOUND_EVENTS.register();
         IFEntityTypes.ENTITY_TYPES.register();
         DisguiseTypes.DISGUISE_TYPES.register();
+        IFCriteriaTriggers.CRITERIA_TRIGGERS.register();
 
         IFEntityTypes.init();
         IFEventHandler.init();

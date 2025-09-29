@@ -12,6 +12,7 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 import net.threetag.itfollows.IFConfig;
+import net.threetag.itfollows.advancements.IFCriteriaTriggers;
 import net.threetag.itfollows.sound.IFSoundEvents;
 
 public class CursePlayerHandler {
@@ -88,6 +89,7 @@ public class CursePlayerHandler {
             this.spawnNewEntity(distance);
             this.player.playSound(IFSoundEvents.ENTITY_APPROACHING.get());
             this.player.connection.send(new ClientboundSoundEntityPacket(BuiltInRegistries.SOUND_EVENT.wrapAsHolder(IFSoundEvents.ENTITY_APPROACHING.get()), SoundSource.HOSTILE, this.player, 1F, 1F, this.player.getRandom().nextLong()));
+            IFCriteriaTriggers.RECEIVED_CURSE.get().trigger(this.player);
         }
     }
 

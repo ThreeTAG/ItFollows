@@ -39,6 +39,9 @@ public abstract class ItFollowsLangProvider extends FabricLanguageProvider {
             this.addConfigCategory(builder, IFConfig.CATEGORY_ENTITY, "Entity Settings");
             this.addConfigEntry(builder, "MOVEMENT_SPEED", "Movement Speed");
             this.addConfigEntry(builder, "BLOCK_BREAK_INTERVAL", "Block Break Interval");
+
+            builder.add(ItFollowsAdvancementProvider.ADVANCEMENT_RECEIVE_CURSE_TITLE, "It doesn't think... it doesn't feel...");
+            builder.add(ItFollowsAdvancementProvider.ADVANCEMENT_RECEIVE_CURSE_DESCRIPTION, "It Follows");
         }
     }
 
@@ -63,6 +66,9 @@ public abstract class ItFollowsLangProvider extends FabricLanguageProvider {
             this.addConfigCategory(builder, IFConfig.CATEGORY_ENTITY, "Entitätseinstellungen");
             this.addConfigEntry(builder, "MOVEMENT_SPEED", "Bewegungsgeschwindigkeit");
             this.addConfigEntry(builder, "BLOCK_BREAK_INTERVAL", "Blockbruchintervall");
+
+            builder.add(ItFollowsAdvancementProvider.ADVANCEMENT_RECEIVE_CURSE_TITLE, "Es denkt nicht... es fühlt nicht...");
+            builder.add(ItFollowsAdvancementProvider.ADVANCEMENT_RECEIVE_CURSE_DESCRIPTION, "Es folgt");
         }
     }
 
@@ -87,6 +93,9 @@ public abstract class ItFollowsLangProvider extends FabricLanguageProvider {
             this.addConfigCategory(builder, IFConfig.CATEGORY_ENTITY, "Entitätseinstellungen");
             this.addConfigEntry(builder, "MOVEMENT_SPEED", "Bewejungsjeschwindichgehd");
             this.addConfigEntry(builder, "BLOCK_BREAK_INTERVAL", "Blockbruchintervall");
+
+            builder.add(ItFollowsAdvancementProvider.ADVANCEMENT_RECEIVE_CURSE_TITLE, "Es denkt nisch... es fühlt nisch...");
+            builder.add(ItFollowsAdvancementProvider.ADVANCEMENT_RECEIVE_CURSE_DESCRIPTION, "Es follgt");
         }
     }
 

@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:adventure/kill_mob_near_sculk_catalyst",
+  "criteria": {
+    "received_curse": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {}
+          }
+        ]
+      },
+      "trigger": "it_follows:received_curse"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.it_follows.receive_curse.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "minecraft:ominous_bottle"
+    },
+    "title": {
+      "translate": "advancements.it_follows.receive_curse.title"
+    }
+  },
+  "requirements": [
+    [
+      "received_curse"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

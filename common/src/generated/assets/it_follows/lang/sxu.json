@@ -1,4 +1,6 @@
 {
+  "advancements.it_follows.receive_curse.description": "Es follgt",
+  "advancements.it_follows.receive_curse.title": "Es denkt nisch... es fühlt nisch...",
   "commands.it_follows.position": "%s's Entität is bei %s (%s Blögge endfernd)",
   "commands.it_follows.start_curse.error.already_started": "%s hat den Fluch schoh",
   "commands.it_follows.start_curse.success": "%s hat nu den Fluch",
