@@ -15,5 +15,6 @@ public class ItFollowsDataGen implements DataGeneratorEntrypoint {
         pack.addProvider(ItFollowsLangProvider.Saxon::new);
         pack.addProvider(ItFollowsSoundProvider::new);
         pack.addProvider(ItFollowsJukeboxSongsProvider::new);
+        pack.addProvider(ItFollowsAdvancementProvider::new);
     }
 }

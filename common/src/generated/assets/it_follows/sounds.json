@@ -1,4 +1,18 @@
 {
+  "entity_approaching": {
+    "category": "hostile",
+    "sounds": [
+      "it_follows:entity/approaching_1",
+      "it_follows:entity/approaching_2",
+      "it_follows:entity/approaching_3",
+      "it_follows:entity/approaching_4",
+      "it_follows:entity/approaching_5",
+      "it_follows:entity/approaching_6",
+      "it_follows:entity/approaching_7",
+      "it_follows:entity/approaching_8"
+    ],
+    "subtitle": "subtitles.it_follows.entity_approaching"
+  },
   "music_disc_solstice": {
     "category": "record",
     "sounds": [
@@ -7,6 +21,6 @@
         "stream": true
       }
     ],
-    "subtitle": "subtitles.it_follows.music_disc.solstice"
+    "subtitle": "subtitles.it_follows.music_disc_solstice"
   }
 }

@@ -2,13 +2,17 @@ package net.threetag.itfollows.entity;
 
 import net.minecraft.core.SectionPos;
 import net.minecraft.core.Vec3i;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.protocol.game.ClientboundSoundEntityPacket;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 import net.threetag.itfollows.IFConfig;
+import net.threetag.itfollows.sound.IFSoundEvents;
 
 public class CursePlayerHandler {
 
@@ -82,6 +86,8 @@ public class CursePlayerHandler {
             this.curseActive = true;
             this.entityPosition = null;
             this.spawnNewEntity(distance);
+            this.player.playSound(IFSoundEvents.ENTITY_APPROACHING.get());
+            this.player.connection.send(new ClientboundSoundEntityPacket(BuiltInRegistries.SOUND_EVENT.wrapAsHolder(IFSoundEvents.ENTITY_APPROACHING.get()), SoundSource.HOSTILE, this.player, 1F, 1F, this.player.getRandom().nextLong()));
         }
     }
 
