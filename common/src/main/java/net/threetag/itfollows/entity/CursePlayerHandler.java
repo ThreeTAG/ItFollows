@@ -227,6 +227,10 @@ public class CursePlayerHandler {
         return this.entityPosition;
     }
 
+    public double getEntityDistance(Vec3 pos) {
+        return this.entityPosition != null ? this.entityPosition.distanceTo(pos) : -1;
+    }
+
     public static CursePlayerHandler get(ServerPlayer player) {
         if (player instanceof Curseable curseable) {
             return curseable.it_follows$getCurseHandler();

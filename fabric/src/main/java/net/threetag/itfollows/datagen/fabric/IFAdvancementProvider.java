@@ -17,12 +17,12 @@ import net.threetag.itfollows.advancements.IFCriteriaTriggers;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
-public class ItFollowsAdvancementProvider extends FabricAdvancementProvider {
+public class IFAdvancementProvider extends FabricAdvancementProvider {
 
     public static final String ADVANCEMENT_RECEIVE_CURSE_TITLE = Util.makeDescriptionId("advancements", ItFollows.id("receive_curse.title"));
     public static final String ADVANCEMENT_RECEIVE_CURSE_DESCRIPTION = Util.makeDescriptionId("advancements", ItFollows.id("receive_curse.description"));
 
-    protected ItFollowsAdvancementProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registryLookup) {
+    protected IFAdvancementProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registryLookup) {
         super(output, registryLookup);
     }
 

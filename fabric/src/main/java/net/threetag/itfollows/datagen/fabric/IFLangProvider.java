@@ -12,13 +12,13 @@ import net.threetag.itfollows.item.IFJukeboxSongs;
 
 import java.util.concurrent.CompletableFuture;
 
-public abstract class ItFollowsLangProvider extends FabricLanguageProvider {
+public abstract class IFLangProvider extends FabricLanguageProvider {
 
-    protected ItFollowsLangProvider(FabricDataOutput dataOutput, String languageCode, CompletableFuture<HolderLookup.Provider> registryLookup) {
+    protected IFLangProvider(FabricDataOutput dataOutput, String languageCode, CompletableFuture<HolderLookup.Provider> registryLookup) {
         super(dataOutput, languageCode, registryLookup);
     }
 
-    public static class English extends ItFollowsLangProvider {
+    public static class English extends IFLangProvider {
 
         protected English(FabricDataOutput dataOutput, CompletableFuture<HolderLookup.Provider> registryLookup) {
             super(dataOutput, "en_us", registryLookup);
@@ -34,18 +34,19 @@ public abstract class ItFollowsLangProvider extends FabricLanguageProvider {
 
             builder.add(IFItems.MUSIC_DISC_SOLSTICE.get(), "Music Disc");
             builder.add(Util.makeDescriptionId("jukebox_song", IFJukeboxSongs.SOLSTICE.location()), "Disasterpeace - Title");
+            builder.add(IFItems.SPLASH_POTION_OF_SPREADING.get(), "Splash Potion of Spreading");
 
             this.addConfigTitle(builder, "It Follows");
             this.addConfigCategory(builder, IFConfig.CATEGORY_ENTITY, "Entity Settings");
             this.addConfigEntry(builder, "MOVEMENT_SPEED", "Movement Speed");
             this.addConfigEntry(builder, "BLOCK_BREAK_INTERVAL", "Block Break Interval");
 
-            builder.add(ItFollowsAdvancementProvider.ADVANCEMENT_RECEIVE_CURSE_TITLE, "It doesn't think... it doesn't feel...");
-            builder.add(ItFollowsAdvancementProvider.ADVANCEMENT_RECEIVE_CURSE_DESCRIPTION, "It Follows");
+            builder.add(IFAdvancementProvider.ADVANCEMENT_RECEIVE_CURSE_TITLE, "It doesn't think... it doesn't feel...");
+            builder.add(IFAdvancementProvider.ADVANCEMENT_RECEIVE_CURSE_DESCRIPTION, "It Follows");
         }
     }
 
-    public static class German extends ItFollowsLangProvider {
+    public static class German extends IFLangProvider {
 
         protected German(FabricDataOutput dataOutput, CompletableFuture<HolderLookup.Provider> registryLookup) {
             super(dataOutput, "de_de", registryLookup);
@@ -61,18 +62,19 @@ public abstract class ItFollowsLangProvider extends FabricLanguageProvider {
 
             builder.add(IFItems.MUSIC_DISC_SOLSTICE.get(), "Schallplatte");
             builder.add(Util.makeDescriptionId("jukebox_song", IFJukeboxSongs.SOLSTICE.location()), "Disasterpeace - Title");
+            builder.add(IFItems.SPLASH_POTION_OF_SPREADING.get(), "Wurftrank der Verbreitung");
 
             this.addConfigTitle(builder, "It Follows");
             this.addConfigCategory(builder, IFConfig.CATEGORY_ENTITY, "Entitätseinstellungen");
             this.addConfigEntry(builder, "MOVEMENT_SPEED", "Bewegungsgeschwindigkeit");
             this.addConfigEntry(builder, "BLOCK_BREAK_INTERVAL", "Blockbruchintervall");
 
-            builder.add(ItFollowsAdvancementProvider.ADVANCEMENT_RECEIVE_CURSE_TITLE, "Es denkt nicht... es fühlt nicht...");
-            builder.add(ItFollowsAdvancementProvider.ADVANCEMENT_RECEIVE_CURSE_DESCRIPTION, "Es folgt");
+            builder.add(IFAdvancementProvider.ADVANCEMENT_RECEIVE_CURSE_TITLE, "Es denkt nicht... es fühlt nicht...");
+            builder.add(IFAdvancementProvider.ADVANCEMENT_RECEIVE_CURSE_DESCRIPTION, "Es folgt");
         }
     }
 
-    public static class Saxon extends ItFollowsLangProvider {
+    public static class Saxon extends IFLangProvider {
 
         protected Saxon(FabricDataOutput dataOutput, CompletableFuture<HolderLookup.Provider> registryLookup) {
             super(dataOutput, "sxu", registryLookup);
@@ -88,14 +90,15 @@ public abstract class ItFollowsLangProvider extends FabricLanguageProvider {
 
             builder.add(IFItems.MUSIC_DISC_SOLSTICE.get(), "Schallbladde");
             builder.add(Util.makeDescriptionId("jukebox_song", IFJukeboxSongs.SOLSTICE.location()), "Disasterpeace - Title");
+            builder.add(IFItems.SPLASH_POTION_OF_SPREADING.get(), "Wurftrank der Verbreitung");
 
             this.addConfigTitle(builder, "It Follows");
             this.addConfigCategory(builder, IFConfig.CATEGORY_ENTITY, "Entitätseinstellungen");
             this.addConfigEntry(builder, "MOVEMENT_SPEED", "Bewejungsjeschwindichgehd");
             this.addConfigEntry(builder, "BLOCK_BREAK_INTERVAL", "Blockbruchintervall");
 
-            builder.add(ItFollowsAdvancementProvider.ADVANCEMENT_RECEIVE_CURSE_TITLE, "Es denkt nisch... es fühlt nisch...");
-            builder.add(ItFollowsAdvancementProvider.ADVANCEMENT_RECEIVE_CURSE_DESCRIPTION, "Es follgt");
+            builder.add(IFAdvancementProvider.ADVANCEMENT_RECEIVE_CURSE_TITLE, "Es denkt nisch... es fühlt nisch...");
+            builder.add(IFAdvancementProvider.ADVANCEMENT_RECEIVE_CURSE_DESCRIPTION, "Es follgt");
         }
     }
 

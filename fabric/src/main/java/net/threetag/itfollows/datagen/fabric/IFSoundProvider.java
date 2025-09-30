@@ -10,9 +10,9 @@ import net.threetag.itfollows.sound.IFSoundEvents;
 
 import java.util.concurrent.CompletableFuture;
 
-public class ItFollowsSoundProvider extends FabricSoundsProvider {
+public class IFSoundProvider extends FabricSoundsProvider {
 
-    public ItFollowsSoundProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
+    public IFSoundProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
         super(output, registriesFuture);
     }
 

@@ -9,12 +9,12 @@ public class ItFollowsDataGen implements DataGeneratorEntrypoint {
     public void onInitializeDataGenerator(FabricDataGenerator generator) {
         FabricDataGenerator.Pack pack = generator.createPack();
 
-        pack.addProvider(ItFollowsModelProvider::new);
-        pack.addProvider(ItFollowsLangProvider.English::new);
-        pack.addProvider(ItFollowsLangProvider.German::new);
-        pack.addProvider(ItFollowsLangProvider.Saxon::new);
-        pack.addProvider(ItFollowsSoundProvider::new);
-        pack.addProvider(ItFollowsJukeboxSongsProvider::new);
-        pack.addProvider(ItFollowsAdvancementProvider::new);
+        pack.addProvider(IFModelProvider::new);
+        pack.addProvider(IFLangProvider.English::new);
+        pack.addProvider(IFLangProvider.German::new);
+        pack.addProvider(IFLangProvider.Saxon::new);
+        pack.addProvider(IFSoundProvider::new);
+        pack.addProvider(IFJukeboxSongsProvider::new);
+        pack.addProvider(IFAdvancementProvider::new);
     }
 }

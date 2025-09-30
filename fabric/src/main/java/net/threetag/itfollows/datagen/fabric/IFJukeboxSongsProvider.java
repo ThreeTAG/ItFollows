@@ -11,9 +11,9 @@ import net.threetag.itfollows.item.IFJukeboxSongs;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 
-public class ItFollowsJukeboxSongsProvider extends FabricCodecDataProvider<JukeboxSong> {
+public class IFJukeboxSongsProvider extends FabricCodecDataProvider<JukeboxSong> {
 
-    public ItFollowsJukeboxSongsProvider(FabricDataOutput dataOutput, CompletableFuture<HolderLookup.Provider> registriesFuture) {
+    public IFJukeboxSongsProvider(FabricDataOutput dataOutput, CompletableFuture<HolderLookup.Provider> registriesFuture) {
         super(dataOutput, registriesFuture, Registries.JUKEBOX_SONG, JukeboxSong.DIRECT_CODEC);
     }
 

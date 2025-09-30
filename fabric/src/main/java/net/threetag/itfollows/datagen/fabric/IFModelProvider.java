@@ -7,9 +7,9 @@ import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.model.ModelTemplates;
 import net.threetag.itfollows.item.IFItems;
 
-public class ItFollowsModelProvider extends FabricModelProvider {
+public class IFModelProvider extends FabricModelProvider {
 
-    public ItFollowsModelProvider(FabricDataOutput output) {
+    public IFModelProvider(FabricDataOutput output) {
         super(output);
     }
 
@@ -21,5 +21,6 @@ public class ItFollowsModelProvider extends FabricModelProvider {
     @Override
     public void generateItemModels(ItemModelGenerators gen) {
         gen.generateFlatItem(IFItems.MUSIC_DISC_SOLSTICE.get(), ModelTemplates.FLAT_ITEM);
+        gen.generateFlatItem(IFItems.SPLASH_POTION_OF_SPREADING.get(), ModelTemplates.FLAT_ITEM);
     }
 }
