@@ -1,12 +1,15 @@
 package net.threetag.itfollows.entity;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.protocol.game.ClientboundSoundEntityPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -143,8 +146,8 @@ public class CursePlayerHandler {
             var blockPosInFront = this.lastKnownEntity.blockPosition().offset(offset);
 
             if (y == playerY) {
-                this.player.level().destroyBlock(blockPosInFront, false, this.lastKnownEntity);
-                this.player.level().destroyBlock(blockPosInFront.above(), false, this.lastKnownEntity);
+                destroyBlock(this.player.level(), blockPosInFront, this.lastKnownEntity);
+                destroyBlock(this.player.level(), blockPosInFront.above(), this.lastKnownEntity);
 
                 if (this.player.level().isEmptyBlock(blockPosInFront.below())) {
                     this.player.level().setBlock(blockPosInFront.below(), Blocks.DIRT.defaultBlockState(), 3);
@@ -153,11 +156,11 @@ public class CursePlayerHandler {
                 if (this.player.getBlockX() == this.lastKnownEntity.getBlockX() && this.player.getBlockZ() == this.lastKnownEntity.getBlockZ()) {
                     this.lastKnownEntity.jumpFromGround();
                     this.player.level().setBlock(this.lastKnownEntity.blockPosition(), Blocks.DIRT.defaultBlockState(), 3);
-                    this.player.level().destroyBlock(this.lastKnownEntity.blockPosition().above(2), false, this.lastKnownEntity);
+                    destroyBlock(this.player.level(), this.lastKnownEntity.blockPosition().above(2), this.lastKnownEntity);
                 } else {
-                    this.player.level().destroyBlock(blockPosInFront.above(), false, this.lastKnownEntity);
-                    this.player.level().destroyBlock(blockPosInFront.above(2), false, this.lastKnownEntity);
-                    this.player.level().destroyBlock(blockPosInFront.above(3), false, this.lastKnownEntity);
+                    destroyBlock(this.player.level(), blockPosInFront.above(), this.lastKnownEntity);
+                    destroyBlock(this.player.level(), blockPosInFront.above(2), this.lastKnownEntity);
+                    destroyBlock(this.player.level(), blockPosInFront.above(3), this.lastKnownEntity);
 
                     if (this.player.level().isEmptyBlock(blockPosInFront)) {
                         this.player.level().setBlock(blockPosInFront, Blocks.DIRT.defaultBlockState(), 3);
@@ -165,17 +168,23 @@ public class CursePlayerHandler {
                 }
             } else {
                 if (this.player.getBlockX() == this.lastKnownEntity.getBlockX() && this.player.getBlockZ() == this.lastKnownEntity.getBlockZ()) {
-                    this.player.level().destroyBlock(this.lastKnownEntity.blockPosition().below(), false, this.lastKnownEntity);
+                    destroyBlock(this.player.level(), this.lastKnownEntity.blockPosition().below(), this.lastKnownEntity);
                 } else {
-                    this.player.level().destroyBlock(blockPosInFront.above(), false, this.lastKnownEntity);
-                    this.player.level().destroyBlock(blockPosInFront, false, this.lastKnownEntity);
-                    this.player.level().destroyBlock(blockPosInFront.below(), false, this.lastKnownEntity);
+                    destroyBlock(this.player.level(), blockPosInFront.above(), this.lastKnownEntity);
+                    destroyBlock(this.player.level(), blockPosInFront, this.lastKnownEntity);
+                    destroyBlock(this.player.level(), blockPosInFront.below(), this.lastKnownEntity);
                 }
 
                 if (this.player.level().isEmptyBlock(blockPosInFront.below(2))) {
                     this.player.level().setBlock(blockPosInFront.below(2), Blocks.DIRT.defaultBlockState(), 3);
                 }
             }
+        }
+    }
+
+    private void destroyBlock(Level level, BlockPos pos, Entity entity) {
+        if (level.getBlockState(pos).getBlock() != Blocks.BEDROCK) {
+            level.destroyBlock(pos, false, entity);
         }
     }
 
