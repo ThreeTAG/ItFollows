@@ -252,6 +252,11 @@ public class TheEntity extends PathfinderMob {
     }
 
     @Override
+    public boolean canBeHitByProjectile() {
+        return false;
+    }
+
+    @Override
     public boolean hurtServer(ServerLevel level, DamageSource damageSource, float amount) {
         amount = 0.1F;
         return super.hurtServer(level, damageSource, amount);
