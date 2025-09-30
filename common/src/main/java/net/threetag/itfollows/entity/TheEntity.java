@@ -125,10 +125,13 @@ public class TheEntity extends PathfinderMob {
             this.setHealth(this.getMaxHealth());
 
             // fix sync issue
-            if (this.tickCount <= 1) {
+            if (this.tickCount <= 10) {
                 var target = this.getTargetId();
+                var targetInfector = this.getTargetInfectorId();
                 this.setTargetId(null);
                 this.setTargetId(target);
+                this.setTargetInfectorId(null);
+                this.setTargetInfectorId(targetInfector);
             }
 
             this.ticksSinceDisguiseUpdate++;

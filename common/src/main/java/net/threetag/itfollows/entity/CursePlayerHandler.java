@@ -112,7 +112,6 @@ public class CursePlayerHandler {
             this.infectedBy = null;
             this.setEntityPosition(distance);
             this.spawnNewEntity();
-            this.player.playSound(IFSoundEvents.ENTITY_APPROACHING.get());
             this.player.connection.send(new ClientboundSoundEntityPacket(BuiltInRegistries.SOUND_EVENT.wrapAsHolder(IFSoundEvents.ENTITY_APPROACHING.get()), SoundSource.HOSTILE, this.player, 1F, 1F, this.player.getRandom().nextLong()));
             IFCriteriaTriggers.RECEIVED_CURSE.get().trigger(this.player);
             return true;
@@ -126,7 +125,6 @@ public class CursePlayerHandler {
             this.curseActive = true;
             this.entityPosition = entityPosition;
             this.spawnNewEntity();
-            this.player.playSound(IFSoundEvents.ENTITY_APPROACHING.get());
             this.player.connection.send(new ClientboundSoundEntityPacket(BuiltInRegistries.SOUND_EVENT.wrapAsHolder(IFSoundEvents.ENTITY_APPROACHING.get()), SoundSource.HOSTILE, this.player, 1F, 1F, this.player.getRandom().nextLong()));
             IFCriteriaTriggers.RECEIVED_CURSE.get().trigger(this.player);
             return true;
@@ -141,7 +139,7 @@ public class CursePlayerHandler {
         if (!this.isCurseActive() && infectedByHandler.isCurseActive()) {
             this.curseActive = true;
             this.infectedBy = infectedBy.getUUID();
-            this.entityPosition = infectedByHandler.entityPosition;
+            this.entityPosition = infectedByHandler.getEntityPosition();
             this.spawnNewEntity();
             this.player.connection.send(new ClientboundSoundEntityPacket(BuiltInRegistries.SOUND_EVENT.wrapAsHolder(IFSoundEvents.ENTITY_APPROACHING.get()), SoundSource.HOSTILE, this.player, 1F, 1F, this.player.getRandom().nextLong()));
             IFCriteriaTriggers.RECEIVED_CURSE.get().trigger(this.player);
@@ -159,7 +157,7 @@ public class CursePlayerHandler {
                 // TODO handle offline players
                 var infect = Objects.requireNonNull(this.player.getServer()).getPlayerList().getPlayer(this.infectedBy);
 
-                if (infect != null && CursePlayerHandler.get(infect).startCurseAtPositionReturned(this.entityPosition)) {
+                if (infect != null && CursePlayerHandler.get(infect).startCurseAtPositionReturned(this.getEntityPosition())) {
                     IFCriteriaTriggers.RETURNED_CURSE.get().trigger(infect);
                 }
             }
@@ -295,6 +293,9 @@ public class CursePlayerHandler {
     }
 
     public Vec3 getEntityPosition() {
+        if (this.lastKnownEntity != null) {
+            this.entityPosition = this.lastKnownEntity.position();
+        }
         return this.entityPosition;
     }
 
