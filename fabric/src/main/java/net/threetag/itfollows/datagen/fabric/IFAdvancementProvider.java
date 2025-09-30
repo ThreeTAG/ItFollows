@@ -23,6 +23,9 @@ public class IFAdvancementProvider extends FabricAdvancementProvider {
     public static final String ADVANCEMENT_RECEIVE_CURSE_TITLE = Util.makeDescriptionId("advancements", ItFollows.id("receive_curse.title"));
     public static final String ADVANCEMENT_RECEIVE_CURSE_DESCRIPTION = Util.makeDescriptionId("advancements", ItFollows.id("receive_curse.description"));
 
+    public static final String ADVANCEMENT_BREAK_CURSE_TITLE = Util.makeDescriptionId("advancements", ItFollows.id("break_curse.title"));
+    public static final String ADVANCEMENT_BREAK_CURSE_DESCRIPTION = Util.makeDescriptionId("advancements", ItFollows.id("break_curse.description"));
+
     public static final String ADVANCEMENT_RETURN_CURSE_TITLE = Util.makeDescriptionId("advancements", ItFollows.id("return_curse.title"));
     public static final String ADVANCEMENT_RETURN_CURSE_DESCRIPTION = Util.makeDescriptionId("advancements", ItFollows.id("return_curse.description"));
 
@@ -63,5 +66,21 @@ public class IFAdvancementProvider extends FabricAdvancementProvider {
                 .addCriterion("returned_curse", IFCriteriaTriggers.returnedCurse(EntityPredicate.Builder.entity()))
                 .build(ItFollows.id("return_curse"));
         consumer.accept(returnCurse);
+
+        AdvancementHolder breakCurse = Advancement.Builder.advancement()
+                .display(
+                        Items.TOTEM_OF_UNDYING,
+                        Component.translatable(ADVANCEMENT_BREAK_CURSE_TITLE),
+                        Component.translatable(ADVANCEMENT_BREAK_CURSE_DESCRIPTION),
+                        null,
+                        AdvancementType.CHALLENGE,
+                        true, // Show toast top right
+                        false, // Announce to chat
+                        false // Hidden in the advancement tab
+                )
+                .parent(receiveCurse)
+                .addCriterion("broke_curse", IFCriteriaTriggers.brokeCurse(EntityPredicate.Builder.entity()))
+                .build(ItFollows.id("break_curse"));
+        consumer.accept(breakCurse);
     }
 }

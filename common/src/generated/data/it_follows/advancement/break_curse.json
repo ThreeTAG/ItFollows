@@ -1,0 +1,37 @@
+{
+  "parent": "it_follows:receive_curse",
+  "criteria": {
+    "broke_curse": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {}
+          }
+        ]
+      },
+      "trigger": "it_follows:broke_curse"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "advancements.it_follows.break_curse.description"
+    },
+    "frame": "challenge",
+    "icon": {
+      "count": 1,
+      "id": "minecraft:totem_of_undying"
+    },
+    "title": {
+      "translate": "advancements.it_follows.break_curse.title"
+    }
+  },
+  "requirements": [
+    [
+      "broke_curse"
+    ]
+  ],
+  "sends_telemetry_event": true
+}
