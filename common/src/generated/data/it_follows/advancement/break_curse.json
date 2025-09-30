@@ -15,7 +15,6 @@
     }
   },
   "display": {
-    "announce_to_chat": false,
     "description": {
       "translate": "advancements.it_follows.break_curse.description"
     },

@@ -97,7 +97,7 @@ public class IFAdvancementProvider extends FabricAdvancementProvider {
                         true, // Announce to chat
                         false // Hidden in the advancement tab
                 )
-                .parent(receiveCurse)
+                .parent(passOnCurse)
                 .addCriterion("returned_curse", IFCriteriaTriggers.returnedCurse(EntityPredicate.Builder.entity()))
                 .build(ItFollows.id("return_curse"));
         consumer.accept(returnCurse);

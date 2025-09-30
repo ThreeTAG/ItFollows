@@ -140,6 +140,7 @@ public class CursePlayerHandler {
 
         if (!this.isCurseActive() && infectedByHandler.isCurseActive()) {
             this.curseActive = true;
+            this.infectedBy = infectedBy.getUUID();
             this.entityPosition = infectedByHandler.entityPosition;
             this.spawnNewEntity();
             this.player.connection.send(new ClientboundSoundEntityPacket(BuiltInRegistries.SOUND_EVENT.wrapAsHolder(IFSoundEvents.ENTITY_APPROACHING.get()), SoundSource.HOSTILE, this.player, 1F, 1F, this.player.getRandom().nextLong()));

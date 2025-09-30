@@ -1,7 +1,7 @@
 {
-  "parent": "it_follows:pass_on_curse",
+  "parent": "it_follows:receive_curse",
   "criteria": {
-    "returned_curse": {
+    "passed_on_curse": {
       "conditions": {
         "player": [
           {
@@ -11,24 +11,25 @@
           }
         ]
       },
-      "trigger": "it_follows:returned_curse"
+      "trigger": "it_follows:passed_on_curse"
     }
   },
   "display": {
     "description": {
-      "translate": "advancements.it_follows.return_curse.description"
+      "translate": "advancements.it_follows.pass_on_curse.description"
     },
+    "frame": "goal",
     "icon": {
       "count": 1,
       "id": "it_follows:splash_potion_of_spreading"
     },
     "title": {
-      "translate": "advancements.it_follows.return_curse.title"
+      "translate": "advancements.it_follows.pass_on_curse.title"
     }
   },
   "requirements": [
     [
-      "returned_curse"
+      "passed_on_curse"
     ]
   ],
   "sends_telemetry_event": true
