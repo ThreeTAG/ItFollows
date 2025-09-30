@@ -26,6 +26,9 @@ public class IFAdvancementProvider extends FabricAdvancementProvider {
     public static final String ADVANCEMENT_BREAK_CURSE_TITLE = Util.makeDescriptionId("advancements", ItFollows.id("break_curse.title"));
     public static final String ADVANCEMENT_BREAK_CURSE_DESCRIPTION = Util.makeDescriptionId("advancements", ItFollows.id("break_curse.description"));
 
+    public static final String ADVANCEMENT_PASS_ON_CURSE_TITLE = Util.makeDescriptionId("advancements", ItFollows.id("pass_on_curse.title"));
+    public static final String ADVANCEMENT_PASS_ON_CURSE_DESCRIPTION = Util.makeDescriptionId("advancements", ItFollows.id("pass_on_curse.description"));
+
     public static final String ADVANCEMENT_RETURN_CURSE_TITLE = Util.makeDescriptionId("advancements", ItFollows.id("return_curse.title"));
     public static final String ADVANCEMENT_RETURN_CURSE_DESCRIPTION = Util.makeDescriptionId("advancements", ItFollows.id("return_curse.description"));
 
@@ -51,22 +54,6 @@ public class IFAdvancementProvider extends FabricAdvancementProvider {
                 .build(ItFollows.id("receive_curse"));
         consumer.accept(receiveCurse);
 
-        AdvancementHolder returnCurse = Advancement.Builder.advancement()
-                .display(
-                        IFItems.SPLASH_POTION_OF_SPREADING.get(),
-                        Component.translatable(ADVANCEMENT_RETURN_CURSE_TITLE),
-                        Component.translatable(ADVANCEMENT_RETURN_CURSE_DESCRIPTION),
-                        null,
-                        AdvancementType.TASK,
-                        true, // Show toast top right
-                        false, // Announce to chat
-                        false // Hidden in the advancement tab
-                )
-                .parent(receiveCurse)
-                .addCriterion("returned_curse", IFCriteriaTriggers.returnedCurse(EntityPredicate.Builder.entity()))
-                .build(ItFollows.id("return_curse"));
-        consumer.accept(returnCurse);
-
         AdvancementHolder breakCurse = Advancement.Builder.advancement()
                 .display(
                         Items.TOTEM_OF_UNDYING,
@@ -75,12 +62,44 @@ public class IFAdvancementProvider extends FabricAdvancementProvider {
                         null,
                         AdvancementType.CHALLENGE,
                         true, // Show toast top right
-                        false, // Announce to chat
+                        true, // Announce to chat
                         false // Hidden in the advancement tab
                 )
                 .parent(receiveCurse)
                 .addCriterion("broke_curse", IFCriteriaTriggers.brokeCurse(EntityPredicate.Builder.entity()))
                 .build(ItFollows.id("break_curse"));
         consumer.accept(breakCurse);
+
+        AdvancementHolder passOnCurse = Advancement.Builder.advancement()
+                .display(
+                        IFItems.SPLASH_POTION_OF_SPREADING.get(),
+                        Component.translatable(ADVANCEMENT_PASS_ON_CURSE_TITLE),
+                        Component.translatable(ADVANCEMENT_PASS_ON_CURSE_DESCRIPTION),
+                        null,
+                        AdvancementType.GOAL,
+                        true, // Show toast top right
+                        true, // Announce to chat
+                        false // Hidden in the advancement tab
+                )
+                .parent(receiveCurse)
+                .addCriterion("passed_on_curse", IFCriteriaTriggers.passedOnCurse(EntityPredicate.Builder.entity()))
+                .build(ItFollows.id("pass_on_curse"));
+        consumer.accept(passOnCurse);
+
+        AdvancementHolder returnCurse = Advancement.Builder.advancement()
+                .display(
+                        IFItems.SPLASH_POTION_OF_SPREADING.get(),
+                        Component.translatable(ADVANCEMENT_RETURN_CURSE_TITLE),
+                        Component.translatable(ADVANCEMENT_RETURN_CURSE_DESCRIPTION),
+                        null,
+                        AdvancementType.TASK,
+                        true, // Show toast top right
+                        true, // Announce to chat
+                        false // Hidden in the advancement tab
+                )
+                .parent(receiveCurse)
+                .addCriterion("returned_curse", IFCriteriaTriggers.returnedCurse(EntityPredicate.Builder.entity()))
+                .build(ItFollows.id("return_curse"));
+        consumer.accept(returnCurse);
     }
 }

@@ -97,7 +97,7 @@ public class TheEntityRenderer extends LivingEntityRenderer<TheEntity, LivingEnt
 
     @Override
     public boolean shouldRender(TheEntity entity, Frustum frustum, double d, double e, double f) {
-        return entity.getDisguiseType() != null && (Minecraft.getInstance().player == null || Minecraft.getInstance().player.isCreative() || Minecraft.getInstance().player.getUUID().equals(entity.getTargetId()));
+        return entity.getDisguiseType() != null && (Minecraft.getInstance().player == null || Minecraft.getInstance().player.isCreative() || Minecraft.getInstance().player.getUUID().equals(entity.getTargetId())|| Minecraft.getInstance().player.getUUID().equals(entity.getTargetInfectorId()));
     }
 
     public static class RenderState extends PlayerRenderState {

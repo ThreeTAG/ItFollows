@@ -47,6 +47,8 @@ public abstract class IFLangProvider extends FabricLanguageProvider {
             builder.add(IFAdvancementProvider.ADVANCEMENT_BREAK_CURSE_DESCRIPTION, "Do you think it worked?...");
             builder.add(IFAdvancementProvider.ADVANCEMENT_RETURN_CURSE_TITLE, "Lingering");
             builder.add(IFAdvancementProvider.ADVANCEMENT_RETURN_CURSE_DESCRIPTION, "It is not done with you...");
+            builder.add(IFAdvancementProvider.ADVANCEMENT_PASS_ON_CURSE_TITLE, "Just... pass it along");
+            builder.add(IFAdvancementProvider.ADVANCEMENT_PASS_ON_CURSE_DESCRIPTION, "This can't end poorly... right?");
         }
     }
 
@@ -77,6 +79,8 @@ public abstract class IFLangProvider extends FabricLanguageProvider {
             builder.add(IFAdvancementProvider.ADVANCEMENT_RECEIVE_CURSE_DESCRIPTION, "Es folgt");
             builder.add(IFAdvancementProvider.ADVANCEMENT_BREAK_CURSE_TITLE, "Coda");
             builder.add(IFAdvancementProvider.ADVANCEMENT_BREAK_CURSE_DESCRIPTION, "Denkst du, es hat funktioniert?...");
+            builder.add(IFAdvancementProvider.ADVANCEMENT_PASS_ON_CURSE_TITLE, "Einfach... weitergeben");
+            builder.add(IFAdvancementProvider.ADVANCEMENT_PASS_ON_CURSE_DESCRIPTION, "Das kann doch nicht schiefgehen... oder?");
             builder.add(IFAdvancementProvider.ADVANCEMENT_RETURN_CURSE_TITLE, "Verweilend");
             builder.add(IFAdvancementProvider.ADVANCEMENT_RETURN_CURSE_DESCRIPTION, "Es ist noch nicht fertig mit dir...");
         }
@@ -109,6 +113,8 @@ public abstract class IFLangProvider extends FabricLanguageProvider {
             builder.add(IFAdvancementProvider.ADVANCEMENT_RECEIVE_CURSE_DESCRIPTION, "Es follgt");
             builder.add(IFAdvancementProvider.ADVANCEMENT_BREAK_CURSE_TITLE, "Coda");
             builder.add(IFAdvancementProvider.ADVANCEMENT_BREAK_CURSE_DESCRIPTION, "Denksch, es hot funkti'niert?...");
+            builder.add(IFAdvancementProvider.ADVANCEMENT_PASS_ON_CURSE_TITLE, "Einfach... weidageem");
+            builder.add(IFAdvancementProvider.ADVANCEMENT_PASS_ON_CURSE_DESCRIPTION, "Des kann doch nisch schiefgeehn... oddor?");
             builder.add(IFAdvancementProvider.ADVANCEMENT_RETURN_CURSE_TITLE, "Verweilnd");
             builder.add(IFAdvancementProvider.ADVANCEMENT_RETURN_CURSE_DESCRIPTION, "Es is noch nisch fäddsch mit dir...");
         }

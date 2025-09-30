@@ -144,6 +144,7 @@ public class CursePlayerHandler {
             this.spawnNewEntity();
             this.player.connection.send(new ClientboundSoundEntityPacket(BuiltInRegistries.SOUND_EVENT.wrapAsHolder(IFSoundEvents.ENTITY_APPROACHING.get()), SoundSource.HOSTILE, this.player, 1F, 1F, this.player.getRandom().nextLong()));
             IFCriteriaTriggers.RECEIVED_CURSE.get().trigger(this.player);
+            IFCriteriaTriggers.PASSED_ON_CURSE.get().trigger(infectedBy);
             infectedByHandler.stopCurse(false);
             return true;
         }
@@ -298,6 +299,10 @@ public class CursePlayerHandler {
 
     public double getEntityDistance(Vec3 pos) {
         return this.entityPosition != null ? this.entityPosition.distanceTo(pos) : -1;
+    }
+
+    public UUID getInfectedBy() {
+        return this.infectedBy;
     }
 
     public static CursePlayerHandler get(ServerPlayer player) {

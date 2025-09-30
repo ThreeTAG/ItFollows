@@ -4,7 +4,6 @@ import com.mojang.serialization.Codec;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.entity.Entity;
 import net.threetag.itfollows.entity.disguise.DisguiseType;
@@ -16,6 +15,7 @@ public class IFAttachments {
 
     public static final AttachmentType<DisguiseType> DISGUISE_TYPE = register("disguise_type", () -> null, DisguiseType.CODEC, DisguiseType.STREAM_CODEC);
     public static final AttachmentType<UUID> TARGET_ID = register("target_id", () -> null, UUIDUtil.CODEC, UUIDUtil.STREAM_CODEC);
+    public static final AttachmentType<UUID> TARGET_INFECTOR_ID = register("target_infector_id", () -> null, UUIDUtil.CODEC, UUIDUtil.STREAM_CODEC);
 
     @ExpectPlatform
     public static <T> IFAttachments.AttachmentType<T> register(String id, Supplier<T> defaultValue, Codec<T> codec, StreamCodec<? super RegistryFriendlyByteBuf, T> streamCodec) {

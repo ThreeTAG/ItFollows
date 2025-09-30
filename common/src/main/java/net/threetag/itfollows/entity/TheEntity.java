@@ -32,6 +32,7 @@ import java.util.UUID;
 public class TheEntity extends PathfinderMob {
 
     private Player targetPlayer;
+    private Player targetInfectorPlayer;
     private int ticksSinceDisguiseUpdate;
     private boolean markedForRemoval = false;
 
@@ -43,6 +44,12 @@ public class TheEntity extends PathfinderMob {
         this(IFEntityTypes.THE_ENTITY.get(), target.level());
         this.setTargetId(target.getUUID());
         this.targetPlayer = target;
+
+        if (target instanceof ServerPlayer serverPlayer) {
+            var handler = CursePlayerHandler.get(serverPlayer);
+            this.setTargetInfectorId(handler.getInfectedBy());
+        }
+
         this.setPos(target.position());
         this.moveControl = new TheEntityMoveControl(this);
         this.setPathfindingMalus(PathType.WATER, 0.0F);
@@ -185,12 +192,29 @@ public class TheEntity extends PathfinderMob {
         return this.targetPlayer;
     }
 
+    @Nullable
+    public Player getTargetInfectorPlayer() {
+        if ((this.targetInfectorPlayer == null || this.targetInfectorPlayer.isRemoved()) && this.getTargetInfectorId() != null) {
+            this.targetInfectorPlayer = this.level().getPlayerByUUID(this.getTargetInfectorId());
+        }
+
+        return this.targetInfectorPlayer;
+    }
+
     public void setTargetId(UUID targetId) {
         IFAttachments.TARGET_ID.set(this, targetId);
     }
 
     public UUID getTargetId() {
         return IFAttachments.TARGET_ID.get(this);
+    }
+
+    public void setTargetInfectorId(UUID targetId) {
+        IFAttachments.TARGET_INFECTOR_ID.set(this, targetId);
+    }
+
+    public UUID getTargetInfectorId() {
+        return IFAttachments.TARGET_INFECTOR_ID.get(this);
     }
 
     private void setDisguiseType(DisguiseType disguiseType) {
@@ -203,7 +227,7 @@ public class TheEntity extends PathfinderMob {
 
     @Override
     public boolean isInvisibleTo(Player player) {
-        return player != this.targetPlayer;
+        return player != this.getTargetPlayer() && player != this.getTargetInfectorPlayer();
     }
 
     @Override
