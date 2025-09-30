@@ -29,13 +29,8 @@ public class ThrownSplashPotionOfSpreading extends ThrownSplashPotion {
         super.onHitAsPotion(level, stack, hitResult);
 
         if (this.getOwner() instanceof ServerPlayer player && hitResult instanceof EntityHitResult entityHit && entityHit.getEntity() instanceof ServerPlayer hitPlayer && player != hitPlayer) {
-            var throwerCurse = CursePlayerHandler.get(player);
             var victimCurse = CursePlayerHandler.get(hitPlayer);
-
-            if (throwerCurse.isCurseActive() && !victimCurse.isCurseActive()) {
-                victimCurse.startCurse((int) throwerCurse.getEntityDistance(player.position()));
-                throwerCurse.stopCurse();
-            }
+            victimCurse.startCurseInfectedBy(player);
         }
     }
 }

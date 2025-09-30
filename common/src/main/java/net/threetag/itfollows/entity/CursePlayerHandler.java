@@ -2,6 +2,7 @@ package net.threetag.itfollows.entity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.core.Vec3i;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.protocol.game.ClientboundSoundEntityPacket;
@@ -18,6 +19,9 @@ import net.threetag.itfollows.IFConfig;
 import net.threetag.itfollows.advancements.IFCriteriaTriggers;
 import net.threetag.itfollows.sound.IFSoundEvents;
 
+import java.util.Objects;
+import java.util.UUID;
+
 public class CursePlayerHandler {
 
     public static final int DEFAULT_DISTANCE = 2000;
@@ -31,6 +35,7 @@ public class CursePlayerHandler {
     private int updateTimer = 0;
     private int isStuckTimer = 0;
     private Vec3 isStuckPositionTracker = null;
+    private UUID infectedBy = null;
 
     public CursePlayerHandler(ServerPlayer player) {
         this.player = player;
@@ -40,12 +45,14 @@ public class CursePlayerHandler {
         this.curseActive = input.getBooleanOr("curse_active", false);
         this.lastKnownEntityId = input.getIntOr("last_known_entity_id", -1);
         this.entityPosition = input.read("entity_position", Vec3.CODEC).orElse(null);
+        this.infectedBy = input.read("infected_by", UUIDUtil.CODEC).orElse(null);
     }
 
     public void write(ValueOutput output) {
         output.putBoolean("curse_active", this.curseActive);
         output.putInt("last_known_entity_id", this.lastKnownEntityId);
         output.storeNullable("entity_position", Vec3.CODEC, this.entityPosition);
+        output.storeNullable("infected_by", UUIDUtil.CODEC, this.infectedBy);
     }
 
     public void tick() {
@@ -61,7 +68,7 @@ public class CursePlayerHandler {
                 if (this.lastKnownEntity == null) {
                     this.lastKnownEntityId = -1;
 
-                    if (!this.spawnNewEntity(DEFAULT_DISTANCE)) {
+                    if (!this.spawnNewEntity()) {
                         this.simulateEntityMovement();
                     }
                 }
@@ -85,35 +92,97 @@ public class CursePlayerHandler {
         }
     }
 
-    public void startCurse(int distance) {
+    public boolean startCurseFresh() {
         if (!this.curseActive) {
             this.curseActive = true;
-            this.entityPosition = null;
-            this.spawnNewEntity(distance);
+            this.infectedBy = null;
+            this.setEntityPosition(DEFAULT_DISTANCE);
+            this.spawnNewEntity();
+            this.player.connection.send(new ClientboundSoundEntityPacket(BuiltInRegistries.SOUND_EVENT.wrapAsHolder(IFSoundEvents.ENTITY_APPROACHING.get()), SoundSource.HOSTILE, this.player, 1F, 1F, this.player.getRandom().nextLong()));
+            IFCriteriaTriggers.RECEIVED_CURSE.get().trigger(this.player);
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean startCurseAtDistanceFresh(int distance) {
+        if (!this.curseActive) {
+            this.curseActive = true;
+            this.infectedBy = null;
+            this.setEntityPosition(distance);
+            this.spawnNewEntity();
             this.player.playSound(IFSoundEvents.ENTITY_APPROACHING.get());
             this.player.connection.send(new ClientboundSoundEntityPacket(BuiltInRegistries.SOUND_EVENT.wrapAsHolder(IFSoundEvents.ENTITY_APPROACHING.get()), SoundSource.HOSTILE, this.player, 1F, 1F, this.player.getRandom().nextLong()));
             IFCriteriaTriggers.RECEIVED_CURSE.get().trigger(this.player);
+            return true;
         }
+
+        return false;
     }
 
-    public void stopCurse() {
+    public boolean startCurseAtPositionReturned(Vec3 entityPosition) {
+        if (!this.curseActive) {
+            this.curseActive = true;
+            this.entityPosition = entityPosition;
+            this.spawnNewEntity();
+            this.player.playSound(IFSoundEvents.ENTITY_APPROACHING.get());
+            this.player.connection.send(new ClientboundSoundEntityPacket(BuiltInRegistries.SOUND_EVENT.wrapAsHolder(IFSoundEvents.ENTITY_APPROACHING.get()), SoundSource.HOSTILE, this.player, 1F, 1F, this.player.getRandom().nextLong()));
+            IFCriteriaTriggers.RECEIVED_CURSE.get().trigger(this.player);
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean startCurseInfectedBy(ServerPlayer infectedBy) {
+        var infectedByHandler = CursePlayerHandler.get(infectedBy);
+
+        if (!this.isCurseActive() && infectedByHandler.isCurseActive()) {
+            this.curseActive = true;
+            this.entityPosition = infectedByHandler.entityPosition;
+            this.spawnNewEntity();
+            this.player.connection.send(new ClientboundSoundEntityPacket(BuiltInRegistries.SOUND_EVENT.wrapAsHolder(IFSoundEvents.ENTITY_APPROACHING.get()), SoundSource.HOSTILE, this.player, 1F, 1F, this.player.getRandom().nextLong()));
+            IFCriteriaTriggers.RECEIVED_CURSE.get().trigger(this.player);
+            infectedByHandler.stopCurse(false);
+            return true;
+        }
+
+        return false;
+    }
+
+    public void stopCurse(boolean revertToInfectedBy) {
         if (this.curseActive) {
+            if (revertToInfectedBy && this.infectedBy != null) {
+                // TODO handle offline players
+                var infect = Objects.requireNonNull(this.player.getServer()).getPlayerList().getPlayer(this.infectedBy);
+
+                if (infect != null && CursePlayerHandler.get(infect).startCurseAtPositionReturned(this.entityPosition)) {
+                    IFCriteriaTriggers.RETURNED_CURSE.get().trigger(infect);
+                }
+            }
+
             if (this.lastKnownEntity != null) {
                 this.lastKnownEntity.discard();
             }
             this.entityPosition = null;
             this.curseActive = false;
+            this.infectedBy = null;
         }
     }
 
-    private boolean spawnNewEntity(int distance) {
+    private void setEntityPosition(int distance) {
+        this.entityPosition = TheEntity.getRandomPos(this.player.level(), this.player.position(), distance, this.player.getRandom());
+    }
+
+    private boolean spawnNewEntity() {
         if (this.curseActive) {
             if (this.lastKnownEntity != null) {
                 this.lastKnownEntity.discard();
             }
 
             if (this.entityPosition == null) {
-                this.entityPosition = TheEntity.getRandomPos(this.player.level(), this.player.position(), distance, this.player.getRandom());
+                this.setEntityPosition(DEFAULT_DISTANCE);
             }
 
             if (this.entityPosition.distanceTo(this.player.position()) < DESPAWN_DISTANCE && this.isEntityPosLoaded()) {

@@ -59,11 +59,10 @@ public class ItFollowsCommand {
     private static int startCurse(CommandContext<CommandSourceStack> commandContext, ServerPlayer player, int distance) {
         var handler = CursePlayerHandler.get(player);
 
-        if (handler.isCurseActive()) {
+        if (handler.startCurseAtDistanceFresh(distance)) {
             commandContext.getSource().sendFailure(Component.translatableEscape(ERROR_CURSE_ALREADY_STARTED, player.getDisplayName()));
             return 0;
         } else {
-            handler.startCurse(distance);
             commandContext.getSource().sendSuccess(() -> Component.translatableEscape(START_CURSE_SUCCESS, player.getDisplayName()), true);
             return 1;
         }
@@ -76,7 +75,7 @@ public class ItFollowsCommand {
             commandContext.getSource().sendFailure(Component.translatableEscape(ERROR_NO_ACTIVE_CURSE, player.getDisplayName()));
             return 0;
         } else {
-            handler.stopCurse();
+            handler.stopCurse(false);
             commandContext.getSource().sendSuccess(() -> Component.translatableEscape(STOP_CURSE_SUCCESS, player.getDisplayName()), true);
             return 1;
         }

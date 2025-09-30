@@ -25,7 +25,7 @@ public class KillTargetGoal extends Goal {
 
         if (target != null && target.isAlive() && this.entity.isAlive() && target instanceof ServerPlayer player && !player.isCreative()) {
             target.hurtServer(player.level(), player.level().damageSources().mobAttack(this.entity), Float.MAX_VALUE);
-            CursePlayerHandler.get(player).stopCurse();
+            CursePlayerHandler.get(player).stopCurse(true);
         }
     }
 }

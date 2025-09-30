@@ -43,6 +43,8 @@ public abstract class IFLangProvider extends FabricLanguageProvider {
 
             builder.add(IFAdvancementProvider.ADVANCEMENT_RECEIVE_CURSE_TITLE, "It doesn't think... it doesn't feel...");
             builder.add(IFAdvancementProvider.ADVANCEMENT_RECEIVE_CURSE_DESCRIPTION, "It Follows");
+            builder.add(IFAdvancementProvider.ADVANCEMENT_RETURN_CURSE_TITLE, "Lingering");
+            builder.add(IFAdvancementProvider.ADVANCEMENT_RETURN_CURSE_DESCRIPTION, "It is not done with you...");
         }
     }
 
@@ -71,6 +73,8 @@ public abstract class IFLangProvider extends FabricLanguageProvider {
 
             builder.add(IFAdvancementProvider.ADVANCEMENT_RECEIVE_CURSE_TITLE, "Es denkt nicht... es fühlt nicht...");
             builder.add(IFAdvancementProvider.ADVANCEMENT_RECEIVE_CURSE_DESCRIPTION, "Es folgt");
+            builder.add(IFAdvancementProvider.ADVANCEMENT_RETURN_CURSE_TITLE, "Verweilend");
+            builder.add(IFAdvancementProvider.ADVANCEMENT_RETURN_CURSE_DESCRIPTION, "Es ist noch nicht fertig mit dir...");
         }
     }
 
@@ -99,6 +103,8 @@ public abstract class IFLangProvider extends FabricLanguageProvider {
 
             builder.add(IFAdvancementProvider.ADVANCEMENT_RECEIVE_CURSE_TITLE, "Es denkt nisch... es fühlt nisch...");
             builder.add(IFAdvancementProvider.ADVANCEMENT_RECEIVE_CURSE_DESCRIPTION, "Es follgt");
+            builder.add(IFAdvancementProvider.ADVANCEMENT_RETURN_CURSE_TITLE, "Verweilnd");
+            builder.add(IFAdvancementProvider.ADVANCEMENT_RETURN_CURSE_DESCRIPTION, "Es is noch nisch fäddsch mit dir...");
         }
     }
 
