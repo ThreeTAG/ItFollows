@@ -55,6 +55,17 @@ public class CursePlayerHandler {
         output.storeNullable("infected_by", UUIDUtil.CODEC, this.infectedBy);
     }
 
+    public void copyFrom(CursePlayerHandler source) {
+        this.curseActive = source.curseActive;
+        this.lastKnownEntityId = source.lastKnownEntityId;
+        this.entityPosition = source.entityPosition;
+        this.infectedBy = source.infectedBy;
+
+        if (this.curseActive) {
+            this.spawnNewEntity();
+        }
+    }
+
     public void tick() {
         if (this.curseActive) {
             this.updateTimer++;
