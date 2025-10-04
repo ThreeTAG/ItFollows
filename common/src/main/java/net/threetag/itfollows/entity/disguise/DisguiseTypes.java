@@ -19,6 +19,7 @@ public class DisguiseTypes {
     public static final RegistrySupplier<BasicMonsterDisguise> SKELETON = DISGUISE_TYPES.register("skeleton", BasicMonsterDisguise::new);
     public static final RegistrySupplier<BasicMonsterDisguise> CREEPER = DISGUISE_TYPES.register("creeper", BasicMonsterDisguise::new);
     public static final RegistrySupplier<DrownedDisguise> DROWNED = DISGUISE_TYPES.register("drowned", DrownedDisguise::new);
+    public static final RegistrySupplier<EndermanDisguise> ENDERMAN = DISGUISE_TYPES.register("enderman", EndermanDisguise::new);
 
     @Environment(EnvType.CLIENT)
     public static void initRenderers() {
@@ -27,5 +28,6 @@ public class DisguiseTypes {
         DisguiseRendererRegistry.register(SKELETON, SkeletonDisguiseRenderer::new);
         DisguiseRendererRegistry.register(CREEPER, CreeperDisguiseRenderer::new);
         DisguiseRendererRegistry.register(DROWNED, DrownedDisguiseRenderer::new);
+        DisguiseRendererRegistry.register(ENDERMAN, EndermanDisguiseRenderer::new);
     }
 }
