@@ -7,6 +7,7 @@
   "advancements.it_follows.receive_curse.title": "Es denkt nisch... es fühlt nisch...",
   "advancements.it_follows.return_curse.description": "Es is noch nisch fäddsch mit dir...",
   "advancements.it_follows.return_curse.title": "Verweilnd",
+  "block.it_follows.ominous_pot": "Unheilvoller Grug",
   "commands.it_follows.position": "%s's Entität is bei %s (%s Blögge endfernd)",
   "commands.it_follows.start_curse.error.already_started": "%s hat den Fluch schoh",
   "commands.it_follows.start_curse.success": "%s hat nu den Fluch",

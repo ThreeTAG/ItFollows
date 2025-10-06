@@ -1,0 +1,10 @@
+{
+	"format_version": "1.21.6",
+	"parent": "it_follows:block/ominous_pot_0",
+	"textures": {
+		"0": "it_follows:block/ominous_pot_side_1",
+		"1": "it_follows:block/ominous_pot_end",
+		"2": "it_follows:block/ominous_pot_neck",
+		"particle": "it_follows:block/ominous_pot_side_1"
+	}
+}

@@ -7,6 +7,7 @@
   "advancements.it_follows.receive_curse.title": "Es denkt nicht... es fühlt nicht...",
   "advancements.it_follows.return_curse.description": "Es ist noch nicht fertig mit dir...",
   "advancements.it_follows.return_curse.title": "Verweilend",
+  "block.it_follows.ominous_pot": "Unheilvoller Krug",
   "commands.it_follows.position": "%s's Entität ist bei %s (%s Blöcke entfernt)",
   "commands.it_follows.start_curse.error.already_started": "%s hat den Fluch bereits",
   "commands.it_follows.start_curse.success": "%s hat nun den Fluch",

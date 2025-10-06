@@ -14,7 +14,7 @@ public class IFModelProvider extends FabricModelProvider {
     }
 
     @Override
-    public void generateBlockStateModels(BlockModelGenerators blockStateModelGenerator) {
+    public void generateBlockStateModels(BlockModelGenerators gen) {
 
     }
 

@@ -7,6 +7,7 @@
   "advancements.it_follows.receive_curse.title": "It doesn't think... it doesn't feel...",
   "advancements.it_follows.return_curse.description": "It is not done with you...",
   "advancements.it_follows.return_curse.title": "Lingering",
+  "block.it_follows.ominous_pot": "Ominous Pot",
   "commands.it_follows.position": "%s's entity is at %s (%s blocks away)",
   "commands.it_follows.start_curse.error.already_started": "%s already has an active curse",
   "commands.it_follows.start_curse.success": "%s received the curse",

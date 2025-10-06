@@ -6,6 +6,7 @@ import net.minecraft.Util;
 import net.minecraft.core.HolderLookup;
 import net.threetag.itfollows.IFConfig;
 import net.threetag.itfollows.ItFollows;
+import net.threetag.itfollows.block.IFBlocks;
 import net.threetag.itfollows.command.ItFollowsCommand;
 import net.threetag.itfollows.item.IFItems;
 import net.threetag.itfollows.item.IFJukeboxSongs;
@@ -32,6 +33,7 @@ public abstract class IFLangProvider extends FabricLanguageProvider {
             builder.add(ItFollowsCommand.STOP_CURSE_SUCCESS, "%s no longer has the curse");
             builder.add(ItFollowsCommand.POSITION, "%s's entity is at %s (%s blocks away)");
 
+            builder.add(IFBlocks.OMINOUS_POT.get(), "Ominous Pot");
             builder.add(IFItems.MUSIC_DISC_SOLSTICE.get(), "Music Disc");
             builder.add(Util.makeDescriptionId("jukebox_song", IFJukeboxSongs.SOLSTICE.location()), "Disasterpeace - Title");
             builder.add(IFItems.SPLASH_POTION_OF_SPREADING.get(), "Splash Potion of Spreading");
@@ -66,6 +68,7 @@ public abstract class IFLangProvider extends FabricLanguageProvider {
             builder.add(ItFollowsCommand.STOP_CURSE_SUCCESS, "%s hat nun den Fluch nicht mehr");
             builder.add(ItFollowsCommand.POSITION, "%s's Entität ist bei %s (%s Blöcke entfernt)");
 
+            builder.add(IFBlocks.OMINOUS_POT.get(), "Unheilvoller Krug");
             builder.add(IFItems.MUSIC_DISC_SOLSTICE.get(), "Schallplatte");
             builder.add(Util.makeDescriptionId("jukebox_song", IFJukeboxSongs.SOLSTICE.location()), "Disasterpeace - Title");
             builder.add(IFItems.SPLASH_POTION_OF_SPREADING.get(), "Wurftrank der Verbreitung");
@@ -100,6 +103,7 @@ public abstract class IFLangProvider extends FabricLanguageProvider {
             builder.add(ItFollowsCommand.STOP_CURSE_SUCCESS, "%s hat nu keenen Fluch mehr");
             builder.add(ItFollowsCommand.POSITION, "%s's Entität is bei %s (%s Blögge endfernd)");
 
+            builder.add(IFBlocks.OMINOUS_POT.get(), "Unheilvoller Grug");
             builder.add(IFItems.MUSIC_DISC_SOLSTICE.get(), "Schallbladde");
             builder.add(Util.makeDescriptionId("jukebox_song", IFJukeboxSongs.SOLSTICE.location()), "Disasterpeace - Title");
             builder.add(IFItems.SPLASH_POTION_OF_SPREADING.get(), "Wurftrank der Verbreitung");

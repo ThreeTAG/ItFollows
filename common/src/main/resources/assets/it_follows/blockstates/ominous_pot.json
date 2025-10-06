@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "usage=0": {
+      "model": "it_follows:block/ominous_pot_0"
+    },
+    "usage=1": {
+      "model": "it_follows:block/ominous_pot_1"
+    },
+    "usage=2": {
+      "model": "it_follows:block/ominous_pot_2"
+    },
+    "usage=3": {
+      "model": "it_follows:block/ominous_pot_3"
+    }
+  }
+}

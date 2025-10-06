@@ -2,6 +2,22 @@ plugins {
     id 'com.gradleup.shadow'
 }
 
+loom {
+    accessWidenerPath = project(":common").loom.accessWidenerPath
+
+    runConfigs.configureEach {
+        if (name == "client") {
+            runDir = "../run"
+
+            if (System.getenv('MC_USERNAME') && System.getenv('MC_UUID')) {
+                programArgs '--username', System.getenv('MC_USERNAME'), '--uuid', System.getenv('MC_UUID')
+            }
+        } else if (name == "server") {
+            runDir = "../run/server-fabric"
+        }
+    }
+}
+
 architectury {
     platformSetupLoomIde()
     fabric()
