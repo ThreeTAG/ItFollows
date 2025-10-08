@@ -17,6 +17,8 @@ If the player is brave enough, they can venture down into an Ancient City, endur
 
 In the centre should be a small black urn with a face on it. This urn contains very valuable loot that the player may take, but must be careful, as doing so will increase their risk of receiving the curse.
 
+<img src="https://github.com/ThreeTAG/ItFollows/blob/main/media/curse.gif?raw=true" width="50%">
+
 <br>
 
 </br>
@@ -26,6 +28,8 @@ In the centre should be a small black urn with a face on it. This urn contains v
 Upon receiving the curse, you will now have the Paranormal Stalker, known as The Entity, following you at all times. It will not stop, it cannot be stopped, it will only pursue you until you die by its hands. 
 If you try to run away, it will follow, navigating cliffs, rivers, water, and any terrain. 
 If you try to shut yourself in, it will open the door. If you barricade the door, it will break the walls around you. If you try to isolate yourself in the skies, it will build a tower to get to you.
+
+<img src="https://github.com/ThreeTAG/ItFollows/blob/main/media/entity.gif?raw=true" width="50%">
 
 It can disguise itself as anything that helps it get closer to you. At day, a pig, a cow, even a horse. 
 At night? Zombies, skeletons, creepers, Endermen. Sometimes maybe even villagers…
