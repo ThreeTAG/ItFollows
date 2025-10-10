@@ -2,7 +2,8 @@
 
 <div style="text-align: center;">
 
-![Discord](https://img.shields.io/discord/116908382878695430?style=for-the-badge&logo=discord&logoColor=f9dd55&label=Discord&color=f9dd55&link=https%3A%2F%2Fdiscord.gg%2FGATzmppJms)
+![Discord](https://img.shields.io/discord/116908382878695430?style=for-the-badge&logo=discord&logoColor=008cef&label=Discord&color=008cef&link=https%3A%2F%2Fdiscord.gg%2FGATzmppJms)
+[![wakatime](https://wakatime.com/badge/user/c21fe702-f30d-4acb-b4cd-d0060e380595/project/fff84cf1-a608-40f1-81f1-5b628756b8ab.svg?style=for-the-badge&color=008cef)](https://wakatime.com/badge/user/c21fe702-f30d-4acb-b4cd-d0060e380595/project/fff84cf1-a608-40f1-81f1-5b628756b8ab)
 
 </div>
 
@@ -13,6 +14,7 @@ Based on the cult classic movie of the same name, It Follows introduces a parano
 </br>
 
 <img src="https://github.com/ThreeTAG/ItFollows/blob/main/media/gettingcurse.png?raw=true" width="50%">
+
 If the player is brave enough, they can venture down into an Ancient City, endure the perils of the Warden, hostile mobs, and eventually come across a new structure known as the “Ancient Burial Chamber,” which contains the remains of the city's long-passed residents.
 
 In the centre should be a small black urn with a face on it. This urn contains very valuable loot that the player may take, but must be careful, as doing so will increase their risk of receiving the curse.
