@@ -23,7 +23,7 @@ In the centre should be a small black urn with a face on it. This urn contains v
 
 </br>
 
-<img src="https://github.com/ThreeTAG/ItFollows/blob/main/media/theentitty.png?raw=true" width="30%">
+<img src="https://github.com/ThreeTAG/ItFollows/blob/main/media/theentity.png?raw=true" width="30%">
 
 Upon receiving the curse, you will now have the Paranormal Stalker, known as The Entity, following you at all times. It will not stop, it cannot be stopped, it will only pursue you until you die by its hands. 
 If you try to run away, it will follow, navigating cliffs, rivers, water, and any terrain. 
