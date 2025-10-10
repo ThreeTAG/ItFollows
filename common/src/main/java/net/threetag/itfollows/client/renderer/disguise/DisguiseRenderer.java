@@ -1,16 +1,17 @@
 package net.threetag.itfollows.client.renderer.disguise;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.client.renderer.item.ItemModelResolver;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
@@ -18,44 +19,46 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.AbstractSkullBlock;
+import net.threetag.itfollows.client.renderer.layer.GlowingEyesLayer;
 import net.threetag.itfollows.entity.TheEntity;
 
-public abstract class DisguiseRenderer<S extends LivingEntityRenderState, M extends EntityModel<? super S>> {
+@SuppressWarnings({"rawtypes", "unchecked"})
+public abstract class DisguiseRenderer<S extends LivingEntityRenderState> {
 
-    public final S reusedState = this.createRenderState();
+    public final S reusedState;
+    private final EntityRenderer<?, ? super S> entityRenderer;
+    private final GlowingEyesLayer glowingEyesLayer;
     protected final ItemModelResolver itemModelResolver;
 
-    public DisguiseRenderer(EntityRendererProvider.Context context) {
+    public DisguiseRenderer(EntityRendererProvider.Context context, EntityType<?> entityType) {
+        this.reusedState = this.createRenderState();
+        this.reusedState.entityType = entityType;
+        this.entityRenderer = context.getEntityRenderDispatcher().getRenderer(this.reusedState);
         this.itemModelResolver = context.getItemModelResolver();
-    }
-
-    public abstract M getModel();
-
-    public abstract ResourceLocation getTexture();
-
-    public void setupRotations(S renderState, PoseStack poseStack, float bodyRot, float scale) {
-        if (!renderState.hasPose(Pose.SLEEPING)) {
-            poseStack.mulPose(Axis.YP.rotationDegrees(180.0F - bodyRot));
-        }
-
-        if (renderState.deathTime > 0.0F) {
-            float f = (renderState.deathTime - 1.0F) / 20.0F * 1.6F;
-            f = Mth.sqrt(f);
-            if (f > 1.0F) {
-                f = 1.0F;
-            }
-
-            poseStack.mulPose(Axis.ZP.rotationDegrees(f * 90F));
-        } else if (renderState.isAutoSpinAttack) {
-            poseStack.mulPose(Axis.XP.rotationDegrees(-90.0F - renderState.xRot));
-            poseStack.mulPose(Axis.YP.rotationDegrees(renderState.ageInTicks * -75.0F));
-        } else if (renderState.isUpsideDown) {
-            poseStack.translate(0.0F, (renderState.boundingBoxHeight + 0.1F) / scale, 0.0F);
-            poseStack.mulPose(Axis.ZP.rotationDegrees(180.0F));
+System.out.println("HALLO");
+System.out.println(this.entityRenderer);
+        if (this.entityRenderer instanceof LivingEntityRenderer<?, ?, ?> livingEntityRenderer) {
+            livingEntityRenderer.addLayer(this.glowingEyesLayer = new GlowingEyesLayer(livingEntityRenderer, this.getEyesTexture()));
+        } else {
+            this.glowingEyesLayer = null;
         }
     }
 
     public abstract S createRenderState();
+
+    public abstract ResourceLocation getEyesTexture();
+
+    public void render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
+        if (this.glowingEyesLayer != null) {
+            this.glowingEyesLayer.enabled = true;
+        }
+
+        this.entityRenderer.render(this.reusedState, poseStack, bufferSource, packedLight);
+
+        if (this.glowingEyesLayer != null) {
+            this.glowingEyesLayer.enabled = false;
+        }
+    }
 
     public void extractRenderState(TheEntity entity, S renderState, float partialTick) {
         float g = Mth.rotLerp(partialTick, entity.yHeadRotO, entity.yHeadRot);
@@ -106,18 +109,13 @@ public abstract class DisguiseRenderer<S extends LivingEntityRenderState, M exte
                 renderState.headItem.clear();
             }
         }
-
-        renderState.deathTime = entity.deathTime > 0 ? entity.deathTime + partialTick : 0.0F;
-        Minecraft minecraft = Minecraft.getInstance();
-        renderState.isInvisibleToPlayer = renderState.isInvisible && entity.isInvisibleTo(minecraft.player);
-        renderState.appearsGlowing = minecraft.shouldEntityAppearGlowing(entity);
     }
 
     private static float solveBodyRot(LivingEntity livingEntity, float f, float g) {
         if (livingEntity.getVehicle() instanceof LivingEntity livingEntity2) {
             float h = Mth.rotLerp(g, livingEntity2.yBodyRotO, livingEntity2.yBodyRot);
             float i = 85.0F;
-            float j = Mth.clamp(Mth.wrapDegrees(f - h), -85.0F, 85.0F);
+            float j = Mth.clamp(Mth.wrapDegrees(f - h), -i, i);
             h = f - j;
             if (Math.abs(j) > 50.0F) {
                 h += j * 0.2F;

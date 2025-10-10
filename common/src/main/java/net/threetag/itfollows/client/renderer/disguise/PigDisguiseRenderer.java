@@ -1,33 +1,23 @@
 package net.threetag.itfollows.client.renderer.disguise;
 
-import net.minecraft.client.model.PigModel;
-import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.state.PigRenderState;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.PigVariants;
 import net.minecraft.world.item.ItemStack;
+import net.threetag.itfollows.ItFollows;
 import net.threetag.itfollows.entity.TheEntity;
 
-public class PigDisguiseRenderer extends DisguiseRenderer<PigRenderState, PigModel> {
-
-    private static final ResourceLocation TEXTURE = ResourceLocation.withDefaultNamespace("textures/entity/pig/temperate_pig.png");
-
-    private final PigModel model;
+public class PigDisguiseRenderer extends DisguiseRenderer<PigRenderState> {
 
     public PigDisguiseRenderer(EntityRendererProvider.Context context) {
-        super(context);
-        this.model = new PigModel(context.bakeLayer(ModelLayers.PIG));
+        super(context, EntityType.PIG);
     }
 
     @Override
-    public PigModel getModel() {
-        return this.model;
-    }
-
-    @Override
-    public ResourceLocation getTexture() {
-        return TEXTURE;
+    public ResourceLocation getEyesTexture() {
+        return ItFollows.id("textures/disguises/pig_eyes.png");
     }
 
     @Override

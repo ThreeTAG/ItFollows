@@ -14,7 +14,8 @@ public class DisguiseTypes {
     @SuppressWarnings("unchecked")
     public static final DeferredRegister<DisguiseType> DISGUISE_TYPES = DeferredRegister.create(ItFollows.MOD_ID, (ResourceKey<Registry<DisguiseType>>) DisguiseType.REGISTRY.key());
 
-    public static final RegistrySupplier<PigDisguise> PIG = DISGUISE_TYPES.register("pig", PigDisguise::new);
+    public static final RegistrySupplier<BasicAnimalDisguise> PIG = DISGUISE_TYPES.register("pig", BasicAnimalDisguise::new);
+    public static final RegistrySupplier<BasicAnimalDisguise> SHEEP = DISGUISE_TYPES.register("sheep", BasicAnimalDisguise::new);
     public static final RegistrySupplier<BasicMonsterDisguise> ZOMBIE = DISGUISE_TYPES.register("zombie", BasicMonsterDisguise::new);
     public static final RegistrySupplier<BasicMonsterDisguise> SKELETON = DISGUISE_TYPES.register("skeleton", BasicMonsterDisguise::new);
     public static final RegistrySupplier<BasicMonsterDisguise> CREEPER = DISGUISE_TYPES.register("creeper", BasicMonsterDisguise::new);
@@ -24,6 +25,7 @@ public class DisguiseTypes {
     @Environment(EnvType.CLIENT)
     public static void initRenderers() {
         DisguiseRendererRegistry.register(PIG, PigDisguiseRenderer::new);
+        DisguiseRendererRegistry.register(SHEEP, SheepDisguiseRenderer::new);
         DisguiseRendererRegistry.register(ZOMBIE, ZombieDisguiseRenderer::new);
         DisguiseRendererRegistry.register(SKELETON, SkeletonDisguiseRenderer::new);
         DisguiseRendererRegistry.register(CREEPER, CreeperDisguiseRenderer::new);

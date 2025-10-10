@@ -12,15 +12,15 @@ import java.util.function.Supplier;
 public class DisguiseRendererRegistry {
 
     private static final Map<Supplier<? extends DisguiseType>, DisguiseRendererProvider> RENDERER_PROVIDER_MAP = new HashMap<>();
-    private static final Map<DisguiseType, DisguiseRenderer<?, ?>> RENDERER_MAP = new HashMap<>();
+    private static final Map<DisguiseType, DisguiseRenderer<?>> RENDERER_MAP = new HashMap<>();
 
     public static void register(Supplier<? extends DisguiseType> disguise, DisguiseRendererProvider rendererProvider) {
         RENDERER_PROVIDER_MAP.put(disguise, rendererProvider);
     }
 
     @SuppressWarnings("unchecked")
-    public static <S extends LivingEntityRenderState, M extends EntityModel<? super S>> DisguiseRenderer<S, M> getRenderer(DisguiseType disguiseType) {
-        return (DisguiseRenderer<S, M>) RENDERER_MAP.get(disguiseType);
+    public static <S extends LivingEntityRenderState, M extends EntityModel<? super S>> DisguiseRenderer<S> getRenderer(DisguiseType disguiseType) {
+        return (DisguiseRenderer<S>) RENDERER_MAP.get(disguiseType);
     }
 
     public static void reload(EntityRendererProvider.Context context) {
@@ -33,7 +33,7 @@ public class DisguiseRendererRegistry {
 
     public interface DisguiseRendererProvider {
 
-        DisguiseRenderer<?, ?> create(EntityRendererProvider.Context context);
+        DisguiseRenderer<?> create(EntityRendererProvider.Context context);
 
     }
 

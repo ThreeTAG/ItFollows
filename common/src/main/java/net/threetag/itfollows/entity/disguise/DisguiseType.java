@@ -24,24 +24,15 @@ public abstract class DisguiseType {
 
     public abstract boolean isValid(TheEntity entity);
 
-    public abstract int getPriority();
+    public abstract int getWeight();
 
     public static DisguiseType findDisguise(TheEntity entity, RandomSource random) {
         List<DisguiseType> applicable = new ArrayList<>();
 
         for (DisguiseType disguiseType : REGISTRY) {
             if (disguiseType.isValid(entity)) {
-                if (applicable.isEmpty()) {
+                for (int i = 0; i < disguiseType.getWeight(); i++) {
                     applicable.add(disguiseType);
-                } else {
-                    var priority = applicable.getFirst().getPriority();
-
-                    if (priority < disguiseType.getPriority()) {
-                        applicable.clear();
-                        applicable.add(disguiseType);
-                    } else if (priority == disguiseType.getPriority()) {
-                        applicable.add(disguiseType);
-                    }
                 }
             }
         }
@@ -57,7 +48,7 @@ public abstract class DisguiseType {
             return DisguiseTypes.PIG.get();
         }
 
-        if (currentDisguise.getPriority() == randomNew.getPriority()) {
+        if (applicable.contains(currentDisguise)) {
             return currentDisguise;
         } else {
             return randomNew;

@@ -11,7 +11,7 @@ public class EndermanDisguise extends DisguiseType {
     }
 
     @Override
-    public int getPriority() {
+    public int getWeight() {
         return 50;
     }
 }

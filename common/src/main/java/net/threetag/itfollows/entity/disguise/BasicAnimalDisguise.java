@@ -2,7 +2,7 @@ package net.threetag.itfollows.entity.disguise;
 
 import net.threetag.itfollows.entity.TheEntity;
 
-public class PigDisguise extends DisguiseType {
+public class BasicAnimalDisguise extends DisguiseType {
 
     @Override
     public boolean isValid(TheEntity entity) {
@@ -10,7 +10,7 @@ public class PigDisguise extends DisguiseType {
     }
 
     @Override
-    public int getPriority() {
+    public int getWeight() {
         return 10;
     }
 }

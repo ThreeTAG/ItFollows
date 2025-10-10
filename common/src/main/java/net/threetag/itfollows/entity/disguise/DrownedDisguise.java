@@ -12,7 +12,7 @@ public class DrownedDisguise extends DisguiseType {
     }
 
     @Override
-    public int getPriority() {
+    public int getWeight() {
         return 35;
     }
 
