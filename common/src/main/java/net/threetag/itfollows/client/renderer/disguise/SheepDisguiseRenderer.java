@@ -11,7 +11,7 @@ import net.threetag.itfollows.entity.TheEntity;
 public class SheepDisguiseRenderer extends DisguiseRenderer<SheepRenderState> {
 
     public SheepDisguiseRenderer(EntityRendererProvider.Context context) {
-        super(context, EntityType.PIG);
+        super(context, EntityType.SHEEP);
     }
 
     @Override
