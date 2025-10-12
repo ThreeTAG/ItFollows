@@ -35,8 +35,7 @@ public abstract class DisguiseRenderer<S extends LivingEntityRenderState> {
         this.reusedState.entityType = entityType;
         this.entityRenderer = context.getEntityRenderDispatcher().getRenderer(this.reusedState);
         this.itemModelResolver = context.getItemModelResolver();
-System.out.println("HALLO");
-System.out.println(this.entityRenderer);
+
         if (this.entityRenderer instanceof LivingEntityRenderer<?, ?, ?> livingEntityRenderer) {
             livingEntityRenderer.addLayer(this.glowingEyesLayer = new GlowingEyesLayer(livingEntityRenderer, this.getEyesTexture()));
         } else {

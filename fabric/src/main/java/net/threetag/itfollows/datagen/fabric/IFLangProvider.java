@@ -8,6 +8,7 @@ import net.threetag.itfollows.IFConfig;
 import net.threetag.itfollows.ItFollows;
 import net.threetag.itfollows.block.IFBlocks;
 import net.threetag.itfollows.command.ItFollowsCommand;
+import net.threetag.itfollows.entity.IFEntityTypes;
 import net.threetag.itfollows.item.IFItems;
 import net.threetag.itfollows.item.IFJukeboxSongs;
 
@@ -37,6 +38,8 @@ public abstract class IFLangProvider extends FabricLanguageProvider {
             builder.add(IFItems.MUSIC_DISC_SOLSTICE.get(), "Music Disc");
             builder.add(Util.makeDescriptionId("jukebox_song", IFJukeboxSongs.SOLSTICE.location()), "Disasterpeace - Title");
             builder.add(IFItems.SPLASH_POTION_OF_SPREADING.get(), "Splash Potion of Spreading");
+
+            builder.add(IFEntityTypes.THE_ENTITY.get(), "The Entity");
 
             this.addConfigTitle(builder, "It Follows");
             this.addConfigCategory(builder, IFConfig.CATEGORY_ENTITY, "Entity Settings");
@@ -73,6 +76,8 @@ public abstract class IFLangProvider extends FabricLanguageProvider {
             builder.add(Util.makeDescriptionId("jukebox_song", IFJukeboxSongs.SOLSTICE.location()), "Disasterpeace - Title");
             builder.add(IFItems.SPLASH_POTION_OF_SPREADING.get(), "Wurftrank der Verbreitung");
 
+            builder.add(IFEntityTypes.THE_ENTITY.get(), "Das Wesen");
+
             this.addConfigTitle(builder, "It Follows");
             this.addConfigCategory(builder, IFConfig.CATEGORY_ENTITY, "Entitätseinstellungen");
             this.addConfigEntry(builder, "MOVEMENT_SPEED", "Bewegungsgeschwindigkeit");
@@ -107,6 +112,8 @@ public abstract class IFLangProvider extends FabricLanguageProvider {
             builder.add(IFItems.MUSIC_DISC_SOLSTICE.get(), "Schallbladde");
             builder.add(Util.makeDescriptionId("jukebox_song", IFJukeboxSongs.SOLSTICE.location()), "Disasterpeace - Title");
             builder.add(IFItems.SPLASH_POTION_OF_SPREADING.get(), "Wurftrank der Verbreitung");
+
+            builder.add(IFEntityTypes.THE_ENTITY.get(), "Das Wesen");
 
             this.addConfigTitle(builder, "It Follows");
             this.addConfigCategory(builder, IFConfig.CATEGORY_ENTITY, "Entitätseinstellungen");

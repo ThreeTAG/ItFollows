@@ -13,6 +13,21 @@
     ],
     "subtitle": "subtitles.it_follows.entity_approaching"
   },
+  "entity_charging": {
+    "category": "hostile",
+    "sounds": [
+      "it_follows:entity/charging"
+    ],
+    "subtitle": "subtitles.it_follows.entity_charging"
+  },
+  "killed_by_entity": {
+    "category": "hostile",
+    "sounds": [
+      "it_follows:entity/killed_by_1",
+      "it_follows:entity/killed_by_2"
+    ],
+    "subtitle": "subtitles.it_follows.killed_by_entity"
+  },
   "music_disc_solstice": {
     "category": "record",
     "sounds": [

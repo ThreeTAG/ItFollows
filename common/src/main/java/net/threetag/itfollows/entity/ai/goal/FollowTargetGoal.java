@@ -41,6 +41,10 @@ public class FollowTargetGoal extends Goal {
             if (--this.timeToRecalcPath <= 0) {
                 this.timeToRecalcPath = this.adjustedTickDelay(10);
                 this.navigation.moveTo(target, 1);
+
+                if (target.distanceTo(this.entity) < 2) {
+                    this.entity.startCharging();
+                }
             }
         }
     }

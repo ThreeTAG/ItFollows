@@ -13,6 +13,7 @@
   "commands.it_follows.start_curse.success": "%s hat nun den Fluch",
   "commands.it_follows.stop_curse.error.no_active_curse": "%s hat keinen Fluch",
   "commands.it_follows.stop_curse.success": "%s hat nun den Fluch nicht mehr",
+  "entity.it_follows.the_entity": "Das Wesen",
   "it_follows.midnightconfig.BLOCK_BREAK_INTERVAL": "Blockbruchintervall",
   "it_follows.midnightconfig.MOVEMENT_SPEED": "Bewegungsgeschwindigkeit",
   "it_follows.midnightconfig.category.entity": "Entitätseinstellungen",

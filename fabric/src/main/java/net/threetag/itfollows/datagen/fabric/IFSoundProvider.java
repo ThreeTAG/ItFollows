@@ -28,6 +28,13 @@ public class IFSoundProvider extends FabricSoundsProvider {
                 .sound(SoundTypeBuilder.EntryBuilder.ofFile(ItFollows.id("entity/approaching_7")))
                 .sound(SoundTypeBuilder.EntryBuilder.ofFile(ItFollows.id("entity/approaching_8")))
                 .category(SoundSource.HOSTILE));
+        exporter.add(IFSoundEvents.ENTITY_CHARGING.getId(), SoundTypeBuilder.of(IFSoundEvents.ENTITY_CHARGING.get())
+                .sound(SoundTypeBuilder.EntryBuilder.ofFile(ItFollows.id("entity/charging")))
+                .category(SoundSource.HOSTILE));
+        exporter.add(IFSoundEvents.KILLED_BY_ENTITY.getId(), SoundTypeBuilder.of(IFSoundEvents.KILLED_BY_ENTITY.get())
+                .sound(SoundTypeBuilder.EntryBuilder.ofFile(ItFollows.id("entity/killed_by_1")))
+                .sound(SoundTypeBuilder.EntryBuilder.ofFile(ItFollows.id("entity/killed_by_2")))
+                .category(SoundSource.HOSTILE));
         exporter.add(IFSoundEvents.MUSIC_DISC_SOLSTICE.getId(), SoundTypeBuilder.of(IFSoundEvents.MUSIC_DISC_SOLSTICE.get())
                 .sound(SoundTypeBuilder.EntryBuilder.ofFile(ItFollows.id("records/solstice")).stream(true))
                 .category(SoundSource.RECORDS));

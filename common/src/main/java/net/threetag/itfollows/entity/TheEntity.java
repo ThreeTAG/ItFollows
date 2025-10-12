@@ -1,8 +1,11 @@
 package net.threetag.itfollows.entity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.protocol.game.ClientboundSoundEntityPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
@@ -24,6 +27,7 @@ import net.threetag.itfollows.attachment.IFAttachments;
 import net.threetag.itfollows.entity.ai.goal.FollowTargetGoal;
 import net.threetag.itfollows.entity.ai.goal.KillTargetGoal;
 import net.threetag.itfollows.entity.disguise.DisguiseType;
+import net.threetag.itfollows.sound.IFSoundEvents;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,6 +39,7 @@ public class TheEntity extends PathfinderMob {
     private Player targetInfectorPlayer;
     private int ticksSinceDisguiseUpdate;
     private boolean markedForRemoval = false;
+    public int chargingTimer = -1;
 
     public TheEntity(EntityType<? extends PathfinderMob> entityType, Level level) {
         super(entityType, level);
@@ -226,6 +231,17 @@ public class TheEntity extends PathfinderMob {
 
     public DisguiseType getDisguiseType() {
         return IFAttachments.DISGUISE_TYPE.get(this);
+    }
+
+    public int getChargingTimer() {
+        return chargingTimer;
+    }
+
+    public void startCharging() {
+        if (this.getTargetPlayer() instanceof ServerPlayer player && this.chargingTimer < 0) {
+            player.connection.send(new ClientboundSoundEntityPacket(BuiltInRegistries.SOUND_EVENT.wrapAsHolder(IFSoundEvents.ENTITY_CHARGING.get()), SoundSource.HOSTILE, player, 1F, 1F, player.getRandom().nextLong()));
+            this.chargingTimer = 0;
+        }
     }
 
     @Override

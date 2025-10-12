@@ -11,6 +11,8 @@ public class IFSoundEvents {
     public static final DeferredRegister<SoundEvent> SOUND_EVENTS = DeferredRegister.create(ItFollows.MOD_ID, Registries.SOUND_EVENT);
 
     public static final RegistrySupplier<SoundEvent> ENTITY_APPROACHING = SOUND_EVENTS.register("entity_approaching", () -> SoundEvent.createVariableRangeEvent(ItFollows.id("entity_approaching")));
+    public static final RegistrySupplier<SoundEvent> ENTITY_CHARGING = SOUND_EVENTS.register("entity_charging", () -> SoundEvent.createVariableRangeEvent(ItFollows.id("entity_charging")));
+    public static final RegistrySupplier<SoundEvent> KILLED_BY_ENTITY = SOUND_EVENTS.register("killed_by_entity", () -> SoundEvent.createVariableRangeEvent(ItFollows.id("killed_by_entity")));
     public static final RegistrySupplier<SoundEvent> MUSIC_DISC_SOLSTICE = SOUND_EVENTS.register("music_disc_solstice", () -> SoundEvent.createVariableRangeEvent(ItFollows.id("music_disc_solstice")));
 
 }
