@@ -11,7 +11,7 @@
 
 </div>
 
-Based on the cult classic movie of the same name, It Follows introduces a paranormal stalker to the game, known only as “The Entity,” in the form of a curse that is acquired when the player becomes overly greedy while looting ancient cities.
+Based on the cult classic movie of the same name, It Follows introduces a paranormal stalker to the game, known only as “The Entity”, in the form of a curse that is acquired when the player becomes overly greedy while looting ancient cities.
 
 <br>
 
