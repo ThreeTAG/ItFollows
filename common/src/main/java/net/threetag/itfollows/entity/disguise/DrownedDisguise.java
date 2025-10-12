@@ -13,7 +13,7 @@ public class DrownedDisguise extends DisguiseType {
 
     @Override
     public int getWeight() {
-        return 35;
+        return 10;
     }
 
 }

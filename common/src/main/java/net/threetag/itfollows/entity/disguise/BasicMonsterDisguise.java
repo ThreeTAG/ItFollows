@@ -13,7 +13,7 @@ public class BasicMonsterDisguise extends DisguiseType {
 
     @Override
     public int getWeight() {
-        return 30;
+        return 5;
     }
 }
 

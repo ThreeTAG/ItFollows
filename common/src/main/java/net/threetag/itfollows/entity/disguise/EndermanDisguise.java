@@ -12,6 +12,6 @@ public class EndermanDisguise extends DisguiseType {
 
     @Override
     public int getWeight() {
-        return 50;
+        return 20;
     }
 }
