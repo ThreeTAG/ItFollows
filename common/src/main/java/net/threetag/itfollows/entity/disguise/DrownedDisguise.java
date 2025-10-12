@@ -8,12 +8,12 @@ public class DrownedDisguise extends DisguiseType {
     @Override
     public boolean isValid(TheEntity entity) {
         int i = entity.level().getBrightness(LightLayer.SKY, entity.blockPosition()) - entity.level().getSkyDarken();
-        return i <= 5 && entity.level().isDarkOutside() && entity.isInWater();
+        return i <= 5 && entity.isInWater();
     }
 
     @Override
     public int getWeight() {
-        return 10;
+        return 20;
     }
 
 }
