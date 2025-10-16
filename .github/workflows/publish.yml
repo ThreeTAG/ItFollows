@@ -1,0 +1,100 @@
+name: Build and Release (1.21.8)
+
+on:
+  push:
+    branches:
+      - "1.21.8/main"
+
+jobs:
+  build:
+    name: "Build and Release"
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v2
+        with:
+          java-version: 21
+          distribution: 'temurin'
+
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v1
+
+      - run: chmod +x gradlew
+
+      - name: Build Version
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: build --stacktrace --no-daemon
+
+      - name: Setting mod version
+        run: |
+          cat $GITHUB_WORKSPACE/gradle.properties | grep ^archives_base_name= >> $GITHUB_ENV
+          cat $GITHUB_WORKSPACE/gradle.properties | grep ^minecraft_version= >> $GITHUB_ENV
+          cat $GITHUB_WORKSPACE/gradle.properties | grep ^mod_version= >> $GITHUB_ENV
+
+      - name: Publish NeoForge version
+        uses: Kir-Antipov/mc-publish@v3.3
+        with:
+          name: Palladium ${{ env.mod_version }} for NeoForge ${{ env.minecraft_version }}
+          version: ${{ env.mod_version }}+${{ env.minecraft_version }}-forge
+          modrinth-id: j0Iz4kda
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+          curseforge-id: 1363299
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+          changelog-file: CHANGELOG.md
+          loaders: |
+            neoforge
+          game-versions: |
+            ${{ env.minecraft_version }}
+          files: |
+            neoforge/build/libs/!(*-@(dev-shadow|sources|javadoc)).jar
+          dependencies: |
+            architectury{modrinth:lhGA9TYQ}{curseforge:419699}
+
+      - name: Publish Fabric version
+        uses: Kir-Antipov/mc-publish@v3.3
+        with:
+          name: Palladium ${{ env.mod_version }} for Fabric ${{ env.minecraft_version }}
+          version: ${{ env.mod_version }}+${{ env.minecraft_version }}-fabric
+          modrinth-id: j0Iz4kda
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+          curseforge-id: 1363299
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+          changelog-file: CHANGELOG.md
+          loaders: |
+            fabric
+          game-versions: |
+            ${{ env.minecraft_version }}
+          files: |
+            fabric/build/libs/!(*-@(dev-shadow|sources|javadoc)).jar
+          dependencies: |
+            architectury{modrinth:lhGA9TYQ}{curseforge:419699}
+
+      - name: Send SquirrelControl Update
+        uses: tyrrrz/action-http-request@master
+        with:
+          url: https://squirrelcontrol.threetag.net/api/mod-update-post
+          method: POST
+          headers: |
+            Content-Type: application/json
+          body: |
+            {
+              "mod": "it_follows",
+              "version": "${{ env.mod_version }}",
+              "token": "${{ secrets.SQUIRRELCONTROL_API_TOKEN }}"
+            }
+          retry-count: 3
+          retry-delay: 500
+
+      - name: Publish to Maven
+        uses: gradle/gradle-build-action@v2
+        env:
+          MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
+        with:
+          arguments: publish --stacktrace --no-daemon
