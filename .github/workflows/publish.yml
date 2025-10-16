@@ -40,7 +40,7 @@ jobs:
       - name: Publish NeoForge version
         uses: Kir-Antipov/mc-publish@v3.3
         with:
-          name: Palladium ${{ env.mod_version }} for NeoForge ${{ env.minecraft_version }}
+          name: ItFollows ${{ env.mod_version }} for NeoForge ${{ env.minecraft_version }}
           version: ${{ env.mod_version }}+${{ env.minecraft_version }}-forge
           modrinth-id: j0Iz4kda
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
@@ -59,7 +59,7 @@ jobs:
       - name: Publish Fabric version
         uses: Kir-Antipov/mc-publish@v3.3
         with:
-          name: Palladium ${{ env.mod_version }} for Fabric ${{ env.minecraft_version }}
+          name: ItFollows ${{ env.mod_version }} for Fabric ${{ env.minecraft_version }}
           version: ${{ env.mod_version }}+${{ env.minecraft_version }}-fabric
           modrinth-id: j0Iz4kda
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
