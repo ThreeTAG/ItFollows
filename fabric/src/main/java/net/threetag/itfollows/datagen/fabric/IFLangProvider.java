@@ -35,6 +35,7 @@ public abstract class IFLangProvider extends FabricLanguageProvider {
             builder.add(ItFollowsCommand.POSITION, "%s's entity is at %s (%s blocks away)");
 
             builder.add(IFBlocks.OMINOUS_POT.get(), "Ominous Pot");
+            builder.add(IFItems.OMINOUS_POT.get(), "Ominous Pot");
             builder.add(IFItems.MUSIC_DISC_SOLSTICE.get(), "Music Disc");
             builder.add(Util.makeDescriptionId("jukebox_song", IFJukeboxSongs.SOLSTICE.location()), "Disasterpeace - Title");
             builder.add(IFItems.SPLASH_POTION_OF_SPREADING.get(), "Splash Potion of Spreading");
@@ -72,6 +73,7 @@ public abstract class IFLangProvider extends FabricLanguageProvider {
             builder.add(ItFollowsCommand.POSITION, "%s's Entität ist bei %s (%s Blöcke entfernt)");
 
             builder.add(IFBlocks.OMINOUS_POT.get(), "Unheilvoller Krug");
+            builder.add(IFItems.OMINOUS_POT.get(), "Unheilvoller Krug");
             builder.add(IFItems.MUSIC_DISC_SOLSTICE.get(), "Schallplatte");
             builder.add(Util.makeDescriptionId("jukebox_song", IFJukeboxSongs.SOLSTICE.location()), "Disasterpeace - Title");
             builder.add(IFItems.SPLASH_POTION_OF_SPREADING.get(), "Wurftrank der Verbreitung");
@@ -109,6 +111,7 @@ public abstract class IFLangProvider extends FabricLanguageProvider {
             builder.add(ItFollowsCommand.POSITION, "%s's Entität is bei %s (%s Blögge endfernd)");
 
             builder.add(IFBlocks.OMINOUS_POT.get(), "Unheilvoller Grug");
+            builder.add(IFItems.OMINOUS_POT.get(), "Unheilvoller Grug");
             builder.add(IFItems.MUSIC_DISC_SOLSTICE.get(), "Schallbladde");
             builder.add(Util.makeDescriptionId("jukebox_song", IFJukeboxSongs.SOLSTICE.location()), "Disasterpeace - Title");
             builder.add(IFItems.SPLASH_POTION_OF_SPREADING.get(), "Wurftrank der Verbreitung");

@@ -11,6 +11,7 @@ import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -33,6 +34,7 @@ import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.threetag.itfollows.entity.CursePlayerHandler;
 import org.jetbrains.annotations.Nullable;
 
 public class OminousPotBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
@@ -143,10 +145,22 @@ public class OminousPotBlock extends BaseEntityBlock implements SimpleWaterlogge
     @Override
     protected void onProjectileHit(Level level, BlockState state, BlockHitResult hit, Projectile projectile) {
         BlockPos blockPos = hit.getBlockPos();
-        if (level instanceof ServerLevel serverLevel && projectile.mayInteract(serverLevel, blockPos) && projectile.mayBreak(serverLevel)) {
-            level.setBlock(blockPos, state.setValue(USAGE, 3), 260);
+        if (level instanceof ServerLevel serverLevel && projectile.mayInteract(serverLevel, blockPos) && projectile.mayBreak(serverLevel) && level.getBlockEntity(blockPos) instanceof OminousPotBlockEntity pot) {
+            pot.clearContent();
             level.destroyBlock(blockPos, true, projectile);
-            // TODO free curse
+
+            if (state.getValue(USAGE) < 3 && projectile.getOwner() instanceof ServerPlayer player) {
+                CursePlayerHandler.get(player).startCurseFresh();
+            }
+        }
+    }
+
+    @Override
+    public void playerDestroy(Level level, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity, ItemStack tool) {
+        super.playerDestroy(level, player, pos, state, blockEntity, tool);
+
+        if (state.getValue(USAGE) < 3 && player instanceof ServerPlayer pl) {
+            CursePlayerHandler.get(pl).startCurseFresh();
         }
     }
 

@@ -15,19 +15,17 @@ Based on the cult classic movie of the same name, It Follows introduces a parano
 
 <br>
 
-</br>
-
 <img src="https://github.com/ThreeTAG/ItFollows/blob/1.21.8/main/media/gettingcurse.png?raw=true" width="50%">
 
 If the player is brave enough, they can venture down into an Ancient City, endure the perils of the Warden, hostile mobs, and eventually come across a new structure known as the “Ancient Burial Chamber,” which contains the remains of the city's long-passed residents.
 
 In the centre should be a small black urn with a face on it. This urn contains very valuable loot that the player may take, but must be careful, as doing so will increase their risk of receiving the curse.
 
-<img src="https://github.com/ThreeTAG/ItFollows/blob/1.21.8/main/media/curse.gif?raw=true" width="50%">
+<img src="https://github.com/ThreeTAG/ItFollows/blob/1.21.8/main/media/curse.gif?raw=true" width="50%">  
 
 <br>
 
-</br>
+<br>
 
 <img src="https://github.com/ThreeTAG/ItFollows/blob/1.21.8/main/media/theentity.png?raw=true" width="30%">
 
@@ -45,8 +43,6 @@ It cannot be killed. Only hit, and maybe even occasionally stunned. Only the per
 Which brings us to the next section…
 
 <br>
-
-</br>
 
 <img src="https://github.com/ThreeTAG/ItFollows/blob/1.21.8/main/media/passingiton.png?raw=true" width="35%">
 
