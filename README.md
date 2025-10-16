@@ -13,7 +13,7 @@
 
 Based on the cult classic movie of the same name, It Follows introduces a paranormal stalker to the game, known only as “The Entity”, in the form of a curse that is acquired when the player becomes overly greedy while looting ancient cities.
 
-<br>
+<br><br>
 
 <img src="https://github.com/ThreeTAG/ItFollows/blob/1.21.8/main/media/gettingcurse.png?raw=true" width="50%">
 
@@ -21,17 +21,17 @@ If the player is brave enough, they can venture down into an Ancient City, endur
 
 In the centre should be a small black urn with a face on it. This urn contains very valuable loot that the player may take, but must be careful, as doing so will increase their risk of receiving the curse.
 
-<img src="https://github.com/ThreeTAG/ItFollows/blob/1.21.8/main/media/curse.gif?raw=true" width="50%">  
+<img src="https://github.com/ThreeTAG/ItFollows/blob/1.21.8/main/media/curse.gif?raw=true" width="50%">
 
-<br>
-
-<br>
+<br><br>
 
 <img src="https://github.com/ThreeTAG/ItFollows/blob/1.21.8/main/media/theentity.png?raw=true" width="30%">
 
 Upon receiving the curse, you will now have the Paranormal Stalker, known as The Entity, following you at all times. It will not stop, it cannot be stopped, it will only pursue you until you die by its hands. 
 If you try to run away, it will follow, navigating cliffs, rivers, water, and any terrain. 
 If you try to shut yourself in, it will open the door. If you barricade the door, it will break the walls around you. If you try to isolate yourself in the skies, it will build a tower to get to you.
+
+<br><br>
 
 <img src="https://github.com/ThreeTAG/ItFollows/blob/1.21.8/main/media/entity.gif?raw=true" width="50%">
 
@@ -42,7 +42,7 @@ It cannot be killed. Only hit, and maybe even occasionally stunned. Only the per
 
 Which brings us to the next section…
 
-<br>
+<br><br>
 
 <img src="https://github.com/ThreeTAG/ItFollows/blob/1.21.8/main/media/passingiton.png?raw=true" width="35%">
 
@@ -53,6 +53,8 @@ To pass the curse on, you must brew a potion of spreading. You can do this by us
 You must then find someone and simply throw it… once done, you will know by the advancement. Please note that although you may have passed The Entity on, you will still be able to see it just now It Follows the person you have spread it to. 
 
 However, you'd better hope and pray that the person you passed it to passes it to someone else, if they die, The Entity will come right back looking for you…
+
+<br><br>
 
 # Credits
 **[Disasterpeace](https://disasterpeace.com/)** - Music Disc Song, and other sounds
