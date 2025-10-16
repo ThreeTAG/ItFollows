@@ -4,6 +4,7 @@ import dev.architectury.event.events.common.CommandRegistrationEvent;
 import eu.midnightdust.lib.config.MidnightConfig;
 import net.minecraft.resources.ResourceLocation;
 import net.threetag.itfollows.advancements.IFCriteriaTriggers;
+import net.threetag.itfollows.attachment.IFAttachments;
 import net.threetag.itfollows.block.IFBlockEntities;
 import net.threetag.itfollows.block.IFBlocks;
 import net.threetag.itfollows.command.ItFollowsCommand;
@@ -27,6 +28,7 @@ public final class ItFollows {
         DisguiseTypes.DISGUISE_TYPES.register();
         IFCriteriaTriggers.CRITERIA_TRIGGERS.register();
 
+        IFAttachments.init();
         IFEntityTypes.init();
         IFEventHandler.init();
         IFItems.addToTabs();

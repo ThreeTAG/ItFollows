@@ -28,7 +28,11 @@ public class IFAttachmentsImpl {
     }
 
     public static <T> void set(Entity entity, IFAttachments.AttachmentType<T> attachmentType, T value) {
-        entity.setData((net.neoforged.neoforge.attachment.AttachmentType<T>) attachmentType.getPlatformType(), value);
+        if (value == null) {
+            entity.removeData((net.neoforged.neoforge.attachment.AttachmentType<T>) attachmentType.getPlatformType());
+        } else {
+            entity.setData((net.neoforged.neoforge.attachment.AttachmentType<T>) attachmentType.getPlatformType(), value);
+        }
     }
 
     public static <T> T get(Entity entity, IFAttachments.AttachmentType<T> attachmentType) {

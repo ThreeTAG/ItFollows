@@ -17,6 +17,10 @@ public class IFAttachments {
     public static final AttachmentType<UUID> TARGET_ID = register("target_id", () -> null, UUIDUtil.CODEC, UUIDUtil.STREAM_CODEC);
     public static final AttachmentType<UUID> TARGET_INFECTOR_ID = register("target_infector_id", () -> null, UUIDUtil.CODEC, UUIDUtil.STREAM_CODEC);
 
+    public static void init() {
+        // nothing
+    }
+
     @ExpectPlatform
     public static <T> IFAttachments.AttachmentType<T> register(String id, Supplier<T> defaultValue, Codec<T> codec, StreamCodec<? super RegistryFriendlyByteBuf, T> streamCodec) {
         throw new AssertionError();
