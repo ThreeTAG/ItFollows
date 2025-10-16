@@ -1,7 +1,7 @@
 modLoader = "javafml"
 loaderVersion = "[4,)"
-#issueTrackerURL = ""
-license = "Insert License Here"
+issueTrackerURL = "https://github.com/ThreeTAG/ItFollows/issues"
+license = "MIT (modified)"
 
 [[mods]]
 modId = "it_follows"
@@ -9,7 +9,7 @@ version = "${version}"
 displayName = "It Follows"
 authors = "Lucraft, ConnorDawn"
 description = '''
-This is an example description! Tell everyone what your mod is about!
+Be prepared for a mysterious entity hunting you through your world...
 '''
 #logoFile = ""
 

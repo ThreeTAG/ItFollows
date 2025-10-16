@@ -3,7 +3,7 @@
   "id": "it_follows",
   "version": "${version}",
   "name": "It Follows",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "description": "Be prepared for a mysterious entity hunting you through your world...",
   "authors": [
     "Lucraft",
     "ConnorDawn"
@@ -12,7 +12,7 @@
     "homepage": "https://modrinth.com/project/itfollows",
     "sources": "https://github.com/ThreeTAG/ItFollows"
   },
-  "license": "CC0-1.0",
+  "license": "MIT (modified)",
   "icon": "assets/it_follows/icon.png",
   "environment": "*",
   "entrypoints": {
