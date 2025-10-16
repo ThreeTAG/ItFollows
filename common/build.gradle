@@ -15,13 +15,13 @@ dependencies {
 }
 
 sourceSets.main.resources {
-    srcDir project(":common").file("src/generated/resources").absolutePath
+    srcDir project(":common").file("src/generated").absolutePath
 }
 
 publishing {
     publications {
         mavenCommon(MavenPublication) {
-            artifactId = rootProject.archives_base_name + "-" + project.name
+            artifactId = rootProject.archives_name + "-" + project.name
             from components.java
         }
     }
